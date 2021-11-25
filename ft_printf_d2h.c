@@ -21,14 +21,12 @@ int put_hex(const char *fmt, va_list ap, int size)
 
 	ll = va_arg(ap, long long);
 	if (ll < 0)
-	{
 		ll = UINT_MAX + ll + 1;
+	if (size == 2)
+	{
+		size -= 2;
+		write(1, "0x", 2);
 	}
-        if (size == 2)
-        {
-            size -= 2;
-            write(1, "0x", 2);
-        }
 	write_hex(ll, size);
 	return 1; // ここを修正する。（writeに失敗したときに-1, writeできたらその文字数をカウント）
 }
