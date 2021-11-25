@@ -1,62 +1,48 @@
 #include "ft_printf.h"
 
-int	count_nbr(int n)
-{
-	int	len;
-
-	len = 0;
-	if (n == INT_MIN)
-		return (11);
-	if (n < 0)
-	{
-		len++;
-		n *= -1;
-	}
-	while (n > 0)
-	{
-		n /= 10;
-		len++;
-	}
-	return (len);
-}
-
-static	void	ft_putnbr(long n, int fd)
+static	int	ft_putnbr(long n, int fd)
 {
 	char	s;
+	int		len;
 
 	s = '0';
 	if (n <= 9)
 	{
 		s += n;
-		write(fd, &s, 1);
+		return ((int)write(fd, &s, 1));
 	}
 	else
 	{
-		ft_putnbr(n / 10, fd);
+		len += ft_putnbr(n / 10, fd);
 		s += n % 10;
-		write(fd, &s, 1);
+		len += (int)write(fd, &s, 1);
+		return (len);
 	}
 }
 
 // libft
-void	ft_putnbr_fd(int n, int fd)
+int	ft_putnbr_fd(int n, int fd)
 {
-	long	ln;
+	long long	ln;
+	int			len;
 
-	ln = (long)n;
+	ln = (long long)n;
 	if (ln < 0)
 	{
 		ln *= -1;
 		write(fd, "-", 1);
+		len++;
 	}
-	ft_putnbr(ln, fd);
+	len += ft_putnbr(ln, fd);
+	return (len);
 }
 
 ssize_t	put_decimal(const char *fmt, va_list ap)
 {
 	int	n;
+	int	len;
 
 	n = va_arg(ap, int);
-	ft_putnbr_fd(n, 1);
-	return (count_nbr(n));
+	len = ft_putnbr_fd(n, 1);
+	return (len);
 }

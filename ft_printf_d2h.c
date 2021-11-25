@@ -22,8 +22,7 @@ int put_hex(const char *fmt, va_list ap, int size)
 	ll = va_arg(ap, long long);
 	if (ll < 0)
 	{
-		ll *= -1;
-		write(1, "-", 1);
+		ll = UINT_MAX + ll + 1;
 	}
         if (size == 2)
         {

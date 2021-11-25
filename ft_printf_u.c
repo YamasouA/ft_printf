@@ -31,13 +31,11 @@ void write_udecimal(unsigned int n)
     }
 }
 
-#include "stdio.h"
 int put_unsigned_decimal(const char *fmt, va_list ap)
 {
     unsigned int    n;
 
     n = va_arg(ap, unsigned int);
-    printf("%u\n", n);
     write_udecimal(n);
 
     return 0;

@@ -12,34 +12,27 @@ size_t	ft_strlen(const char *str)
 }
 
 // libft
-size_t	ft_putstr_fd(char *s, int fd)
+int	ft_putstr_fd(char *s, int fd)
 {
 	size_t	len;
-    size_t  cnt;
+	int		cnt;
 
     cnt = 0;
 	if (s == NULL)
-		return ;
+		return (-1);
 	len = ft_strlen(s);
 	while (len--)
-    {
-		write(fd, s++, 1);
-        cnt++;
-    }
+		cnt += (int)write(fd, s++, 1);
     return (cnt);
 }
 
 
 int	put_str(const char *fmt, va_list ap)
 {
-	size_t	len;
-    size_t  cnt_write;
+	int	len;
 	char	*s;
 
 	s = va_arg(ap, char *);
-	cnt_write = ft_putstr_fd(s, 1);
-	len = ft_strlen(s);
-    if (cnt != len)
-        return (-1);
+	len = ft_putstr_fd(s, 1);
 	return (len);
 }

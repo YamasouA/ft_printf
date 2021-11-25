@@ -16,11 +16,13 @@ int	parse(const char *fmt, va_list ap)
 		return (put_hex(fmt, ap, 0));
 	else if (*fmt == 'X')
 		return (put_hex(fmt, ap, 1));
-        else if (*fmt == 'p')
-                return (put_hex(fmt, ap, 2));
-	else if (*fmt == '%')
-		return (write(1, "%", 1));
-	return (0);
+    else if (*fmt == 'p')
+        return (put_hex(fmt, ap, 2));
+	else
+	{
+		write(1, "%", 1);
+		return (1);
+	}
 }
 
 int ft_printf(const char *fmt, ...)
