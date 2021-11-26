@@ -6,6 +6,7 @@ static	int	ft_putnbr(long n, int fd)
 	int		len;
 
 	s = '0';
+	len = 0;
 	if (n <= 9)
 	{
 		s += n;
@@ -20,29 +21,19 @@ static	int	ft_putnbr(long n, int fd)
 	}
 }
 
-// libft
-int	ft_putnbr_fd(int n, int fd)
+int	put_decimal(va_list ap)
 {
-	long long	ln;
+	long long	n;
 	int			len;
+	len = 0;
 
-	ln = (long long)n;
-	if (ln < 0)
+	n = (long long)va_arg(ap, int);
+	if (n < 0)
 	{
-		ln *= -1;
-		write(fd, "-", 1);
+		n *= -1;
+		write(1, "-", 1);
 		len++;
 	}
-	len += ft_putnbr(ln, fd);
-	return (len);
-}
-
-ssize_t	put_decimal(const char *fmt, va_list ap)
-{
-	int	n;
-	int	len;
-
-	n = va_arg(ap, int);
-	len = ft_putnbr_fd(n, 1);
+	len = ft_putnbr(n, 1);
 	return (len);
 }

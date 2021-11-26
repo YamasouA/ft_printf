@@ -1,12 +1,10 @@
 #include "ft_printf.h"
 
-
-// ssize_tじゃない方が良い
-int	parse(const char *fmt, va_list ap)
+static int	parse(const char *fmt, va_list ap)
 {
 	if (*fmt == 'c')
 		return (put_chr(fmt, ap));
-	else if (*fmt == 's') // 実装どうしよう
+	else if (*fmt == 's')
 		return (put_str(fmt, ap));
 	else if (*fmt == 'd' || *fmt == 'i')
 	 	return (put_decimal(fmt, ap));

@@ -1,6 +1,5 @@
 #include "ft_printf.h"
 
-// libft
 size_t	ft_strlen(const char *str)
 {
 	size_t	cnt;
@@ -11,7 +10,6 @@ size_t	ft_strlen(const char *str)
 	return (cnt);
 }
 
-// libft
 int	ft_putstr_fd(char *s, int fd)
 {
 	size_t	len;
@@ -21,13 +19,19 @@ int	ft_putstr_fd(char *s, int fd)
 	if (s == NULL)
 		return (-1);
 	len = ft_strlen(s);
-	while (len--)
-		cnt += (int)write(fd, s++, 1);
+	while (len > INT_MAX)
+	{
+		write(fd, s, INT_MAX);
+		s += INT_MAX;
+		len -= INT_MAX;
+		cnt += INT_MAX;
+	}
+	write(fd, s, len);
+	cnt += (int)len;
     return (cnt);
 }
 
-
-int	put_str(const char *fmt, va_list ap)
+int	put_str(va_list ap)
 {
 	int	len;
 	char	*s;

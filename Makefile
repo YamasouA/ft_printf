@@ -1,31 +1,30 @@
 CC := gcc
-CFLAGS := -Wall -Wextra -Werror
-NAME := ft_printf
+CFLAGS := -Wall -Wextra -Werror -c
+NAME := libftprintf.a
 LIBFT := libft.a
-SRCS := *.c
+SRCS := ft_printf.c\
+		ft_printf_c.c\
+		ft_printf_d.c\
+		ft_printf_h.c\
+		ft_printf_s.c\
+		ft_printf_u.c 
+
 OBJS := $(SRCS:.c=.o)
 
-all: $(NAME) $(LIBFT)
+all: $(NAME)
 
 $(NAME) : $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^
-
-.c.o: $(SRCS)
-	$(CC) $(CFLAGS) $@ $^
-
-$(LIBFT) : $(LIBFT_OBJS)
 	ar rc $@ $^
 
-.c.o: $(LIBFT_SRCS)
-	$(CC) $(CFLAGS) -o $@ $^
+.c.o:
+	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -f $(LIBFT_OBJS) $(OBJS)
+	rm -f $(OBJS)
 
 fclean: clean
-	rm -f $(NAME) $(LIBFT)
+	rm -f $(NAME)
 
 re: fclean all
 
 .PHONY: all clean fclean re
-	
