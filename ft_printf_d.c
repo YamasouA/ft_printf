@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-static	int	ft_putnbr(long n, int fd)
+static	int	ft_putnbr(long long n, int fd)
 {
 	char	s;
 	int		len;
@@ -25,8 +25,8 @@ int	put_decimal(va_list ap)
 {
 	long long	n;
 	int			len;
-	len = 0;
 
+	len = 0;
 	n = (long long)va_arg(ap, int);
 	if (n < 0)
 	{
@@ -34,6 +34,6 @@ int	put_decimal(va_list ap)
 		write(1, "-", 1);
 		len++;
 	}
-	len = ft_putnbr(n, 1);
+	len += ft_putnbr(n, 1);
 	return (len);
 }

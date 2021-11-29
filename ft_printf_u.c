@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-int write_udecimal(unsigned int n)
+static int write_udecimal(unsigned int n)
 {
     char    c;
     int     len;
@@ -26,9 +26,10 @@ int write_udecimal(unsigned int n)
 int put_unsigned_decimal(va_list ap)
 {
     unsigned int    n;
+    int             cnt;
 
     n = va_arg(ap, unsigned int);
-    write_udecimal(n);
+    cnt = write_udecimal(n);
 
-    return 0;
+    return (cnt);
 }

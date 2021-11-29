@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-size_t	ft_strlen(const char *str)
+static size_t	ft_strlen(const char *str)
 {
 	size_t	cnt;
 
@@ -10,14 +10,17 @@ size_t	ft_strlen(const char *str)
 	return (cnt);
 }
 
-int	ft_putstr_fd(char *s, int fd)
+static int	ft_putstr_fd(char *s, int fd)
 {
 	size_t	len;
 	int		cnt;
 
     cnt = 0;
 	if (s == NULL)
-		return (-1);
+	{
+		write(1, "(null)", 6);
+		return (6);
+	}
 	len = ft_strlen(s);
 	while (len > INT_MAX)
 	{

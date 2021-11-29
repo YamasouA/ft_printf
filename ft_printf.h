@@ -5,11 +5,10 @@
 #include <unistd.h>
 #include <limits.h>
 int ft_printf(const char *fmt, ...);
-int	ft_putnbr_fd(int n, int fd);
 int	put_chr(va_list ap);
-int put_hex(va_list ap, int size);
 int	put_str(va_list ap);
 int	put_decimal(va_list ap);
-int     put_unsigned_decimal(va_list ap);
+int put_unsigned_decimal(va_list ap);
+int put_hex(va_list ap, int size);
 
 #endif
