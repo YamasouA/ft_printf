@@ -16,7 +16,7 @@ gcc -I includes main.c libftprintf.a
 int main()
 {
     char c;
-    c = a;
+    c = 'a';
     ft_printf("%c\n", c);
     return 0;
 }
