@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-static int write_hex(unsigned ll, int size)
+static int write_hex(unsigned long long ll, int size)
 {
 	const char  hex[2][16] = {"0123456789abcdef", "0123456789ABCDEF"};
 	int	cnt;
@@ -20,15 +20,15 @@ static int write_hex(unsigned ll, int size)
 	return (cnt);
 }
 
-int put_hex(va_list ap, int size)
+int put_p(va_list ap, int size)
 {
-	unsigned	ll;
+	unsigned long long	ll;
 	int			cnt;
 
 	ll = va_arg(ap, long long);
 	cnt = 0;
 	if (ll < 0)
-		ll = UINT_MAX + ll + 1;
+		ll = ULONG_MAX + ll + 1;
     if (size == 2)
     {
         size -= 2;

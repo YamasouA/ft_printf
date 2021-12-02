@@ -15,7 +15,7 @@ static int	parse(const char *fmt, va_list ap)
 	else if (*fmt == 'X')
 		return (put_hex(ap, 1));
     else if (*fmt == 'p')
-        return (put_hex(ap, 2));
+        return (put_p(ap, 2));
 	else
 	{
 		write(1, "%", 1);
