@@ -6,8 +6,8 @@
 
 ## 使い方
 ```bash
-- git clone https://github.com/YamasouA/ft_printf.git
-- gcc main.c libftprintf.a
+git clone https://github.com/YamasouA/ft_printf.git
+gcc main.c libftprintf.a
 ```
 ```c
 #include "ft_printf.h"
