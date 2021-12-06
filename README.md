@@ -7,6 +7,7 @@
 ## 使い方
 ```bash
 git clone https://github.com/YamasouA/ft_printf.git
+make
 gcc -I includes main.c libftprintf.a
 ./a.out
 ```
