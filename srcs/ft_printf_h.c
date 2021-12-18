@@ -3,7 +3,7 @@
 static int write_hex(unsigned ll, int size)
 {
 	const char  hex[2][16] = {"0123456789abcdef", "0123456789ABCDEF"};
-	int	cnt;
+	int		cnt;
 
 	cnt = 0;
 	if (ll < 16)
@@ -25,16 +25,10 @@ int put_hex(va_list ap, int size)
 	unsigned	ll;
 	int			cnt;
 
-	ll = va_arg(ap, long long);
 	cnt = 0;
+	ll = va_arg(ap, long long);
 	if (ll < 0)
 		ll = UINT_MAX + ll + 1;
-    if (size == 2)
-    {
-        size -= 2;
-        write(1, "0x", 2);
-		cnt += 2;
-    }
 	cnt += write_hex(ll, size);
-	return (cnt); // ここを修正する。（writeに失敗したときに-1, writeできたらその文字数をカウント）
+	return (cnt);
 }

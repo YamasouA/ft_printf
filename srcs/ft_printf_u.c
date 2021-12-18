@@ -26,7 +26,7 @@ static int write_udecimal(unsigned int n)
 int put_unsigned_decimal(va_list ap)
 {
     unsigned int    n;
-    int             cnt;
+	int				cnt;
 
     n = va_arg(ap, unsigned int);
     cnt = write_udecimal(n);

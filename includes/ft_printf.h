@@ -10,6 +10,6 @@ int	put_str(va_list ap);
 int	put_decimal(va_list ap);
 int put_unsigned_decimal(va_list ap);
 int put_hex(va_list ap, int size);
-int put_p(va_list ap, int size);
+int put_p(va_list ap);
 
 #endif
