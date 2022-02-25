@@ -1,31 +1,39 @@
 #include "ft_printf.h"
+#include "libft.h"
 
-static int	parse(const char *fmt, va_list ap)
+contents *new_contents(const char *fmt, va_list ap, char *text)
 {
-	char *s;
-	if (*fmt == 'c')
-		new_contents();
+	contents *cont;
+
+	cont->text = text;
+	cont->len = ft_strlen(text);
+	cont->next = NULL;
+	return cont;
+}
+
+static contents	parse(const char *fmt, va_list ap)
+{
+	contents cont;
+	pflag *flag;
+
+    flag = flag_consume(fmt);
+	if (*fmt == 'c' || *fmt == '%')
+		cont = new_contents(fmt, ap, fmt + 1);
 	else if (*fmt == 's')
-		return (put_str(ap));
+		cont = new_contents(fmt, ap, s_string(ap));
 	else if (*fmt == 'd' || *fmt == 'i')
-	 	return (put_decimal(ap));
+	 	cont = new_contents(fmt, ap, d_string(ap));
 	else if (*fmt == 'u')
-	        return (put_unsigned_decimal(ap));
+	    cont = new_contents(fmt, ap, u_string(ap));
 	else if (*fmt == 'x')
-		return (put_hex(ap, 0));
+		cont = new_contents(fmt, ap, x_string(ap));
 	else if (*fmt == 'X')
-		return (put_hex(ap, 1));
+		cont = new_contents(fmt, ap, X_string(ap));
     else if (*fmt == 'p')
-        return (put_p(ap));
-	else if (is_flag)
-	    
-	else
-	{
-		write(1, "%", 1);
-		return (1);
-	}
+        cont = new_contents(fmt, ap, p_string(ap));
+	cont->pflag = flag;
 	fmt++;
-	return new_contents;
+	return cont;
 }
 
 int ft_printf(const char *fmt, ...)
@@ -46,12 +54,9 @@ int ft_printf(const char *fmt, ...)
 		while (is_alnum(p))
 		    p++;
 		if (p != fmt)
-		    cur->next = new_contents(fmt, TY_S, p - fmt);
+		    cur->next = new_contents(fmt, ap, TY_S, p - fmt);
 		else if (*fmt == '%')
-		{
 			cur->next = parse(++fmt, ap);
-			cur = cur->next;
-		}
 	    cur = cur->next;
 	}
 	va_end(ap);

@@ -8,14 +8,14 @@ typedef struct {
     bool is_specifier;
     bool is_alignspace;
     bool is_assign;
-} flag;
+} pflag;
 
 typedef struct contents;
 struct contents{
     size_t len;
     char *text;
     contents *next;
-    flag *flag;
+    pflag *flag;
 }
 
 typedef enum {
@@ -39,7 +39,9 @@ int	put_decimal(va_list ap);
 int put_unsigned_decimal(va_list ap);
 int put_hex(va_list ap, int size);
 int put_p(va_list ap);
-size_t concat_contents()
-contents *new_contents()
+size_t concat_contents();
+contents *new_contents(const char *fmt, va_list ap, typekind kind);
+pflag *flag_consume(const char *fmt);
+void free_list(contents *cont);
 
 #endif
