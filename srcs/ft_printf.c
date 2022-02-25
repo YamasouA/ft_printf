@@ -2,8 +2,9 @@
 
 static int	parse(const char *fmt, va_list ap)
 {
+	char *s;
 	if (*fmt == 'c')
-		return (put_chr(ap));
+		new_contents();
 	else if (*fmt == 's')
 		return (put_str(ap));
 	else if (*fmt == 'd' || *fmt == 'i')
@@ -16,32 +17,45 @@ static int	parse(const char *fmt, va_list ap)
 		return (put_hex(ap, 1));
     else if (*fmt == 'p')
         return (put_p(ap));
+	else if (is_flag)
+	    
 	else
 	{
 		write(1, "%", 1);
 		return (1);
 	}
+	fmt++;
+	return new_contents;
 }
 
 int ft_printf(const char *fmt, ...)
 {
-	int	len;
 	va_list	ap;
+	contents head;
+	contents *cur;
+	char *p;
 
-	len = 0;
+	head->next = NULL;
+	cur = &head;
 	if (fmt == NULL)
 		return (-1);
 	va_start(ap, fmt);
 	while (*fmt)
 	{
-		if (*fmt == '%')
+		p = fmt;
+		while (is_alnum(p))
+		    p++;
+		if (p != fmt)
+		    cur->next = new_contents(fmt, TY_S, p - fmt);
+		else if (*fmt == '%')
 		{
-			fmt++;
-			len += parse(fmt++, ap);
+			cur->next = parse(++fmt, ap);
+			cur = cur->next;
 		}
-		else
-			len += write(1, fmt++, 1);
+	    cur = cur->next;
 	}
 	va_end(ap);
-	return (len);
+
+	return concat_contents(head->next);
 }
+
