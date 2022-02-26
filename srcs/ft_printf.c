@@ -45,6 +45,37 @@ char *extract_text(const char *fmt, size_t len)
     return s;
 }
 
+void free_contents(contents *list)
+{
+	contents *tmp;
+
+	while (list != NULL)
+	{
+        tmp = list->next;
+		free(list->text);
+		free(list->pflag);
+		free(list);
+		list = tmp;
+	}
+}
+
+int concat_contents(contents *list)
+{
+	int len;
+	contents *list_cpy;
+
+    len = 0;
+	list_cpy = list;
+	while (list_cpy != NULL)
+    {
+		len += list_cpy->len;
+		ft_putstr_fd(list->text, 1);
+		list_cpy = list_cpy->next;
+	}
+	free_contents(list);
+	return len;
+}
+
 size_t ft_printf(const char *fmt, ...)
 {
 	va_list	ap;
