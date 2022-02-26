@@ -8,6 +8,7 @@ contents *new_contents(const char *fmt, va_list ap, char *text)
 	cont->text = text;
 	cont->len = ft_strlen(text);
 	cont->next = NULL;
+	cont->flag = NULL;
 	return cont;
 }
 
@@ -59,6 +60,22 @@ void free_contents(contents *list)
 	}
 }
 
+void apply_flag(contents *list)
+{
+	if (list->flag->is_alignleft)
+	    apply_alignleft(list);
+	if (list->flag->is_padding)
+	    apply_padding(list)
+	if (list->flag->is_precision)
+	    apply_precision(list);
+	if (list->flag->is_specifier)
+	    apply_specifier(list);
+	if (list->flag->is_alignspace)
+	    apply_alignspace(list);
+	if (list->flag->is_assign)
+	    apply_assign(list);
+}
+
 int concat_contents(contents *list)
 {
 	int len;
@@ -68,6 +85,8 @@ int concat_contents(contents *list)
 	list_cpy = list;
 	while (list_cpy != NULL)
     {
+        if (list_cpy->flag != NULL)
+		    apply_flag(list_cpy);
 		len += list_cpy->len;
 		ft_putstr_fd(list->text, 1);
 		list_cpy = list_cpy->next;

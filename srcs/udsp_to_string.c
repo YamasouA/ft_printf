@@ -40,7 +40,7 @@ char *p_to_string(va_list ap)
     return s;
 }
 
-char *x_to_string(va_list ap, bool x)
+char *x_to_string(va_list ap, int type)
 {
 
 }

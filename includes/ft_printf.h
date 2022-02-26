@@ -18,16 +18,6 @@ struct contents{
     pflag *flag;
 }
 
-typedef enum {
-    TY_N;
-    TY_U;
-    TY_D;
-    TY_S;
-    TY_C;
-    TY_x;
-    TY_X;
-    TY_P;
-} typekind;
 
 #include <stdarg.h>
 #include <unistd.h>
@@ -39,6 +29,12 @@ int	put_decimal(va_list ap);
 int put_unsigned_decimal(va_list ap);
 int put_hex(va_list ap, int size);
 int put_p(va_list ap);
+void apply_alignleft(contents *list);
+void apply_padding(contents *list);
+void apply_precision(contents *list);
+void apply_specifier(contents *list);
+void apply_alignspace(contents *list);
+void apply_assign(contents *list);
 size_t concat_contents();
 contents *new_contents(const char *fmt, va_list ap, typekind kind);
 pflag *flag_consume(const char *fmt);
