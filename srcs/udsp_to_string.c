@@ -1,46 +1,43 @@
 #include "ft_printf.h"
 
-char *u_to_string(va_list ap)
+char *u_to_string(va_list ap, pflag *flag)
 {
     unsigned int    n;
 
     n = va_arg(ap, unsigned int);
-    return ft_utoa(n);
+    return print(ft_utoa(n), flag);
 }
 
-char *d_to_string(va_list ap)
+char *d_to_string(va_list ap, pflag *flag)
 {
     int n;
 
     n = va_arg(ap, int);
-    return ft_itoa(n);
+    return print(ft_itoa(n), flag);
 }
 
-char *s_to_string(va_list ap)
+char *s_to_string(va_list ap, pflag *flag)
 {
     char *s;
 
     s = va_arg(ap, char *);
     if (!s)
         *s = "(null)";
-    return ft_strdup(s);
+    return print(ft_strdup(s), flag);
 }
 
-char *p_to_string(va_list ap)
+char *p_to_string(va_list ap, pflag *flag)
 {
-    unsigned long long ll;
+    unsigned long ul;
     int cnt;
     char *s;
 
     cnt = 0;
-    ll = va_arg(ap, long long);
-    if (ll < 0)
-        ll = ULONG_MAX + ll + 1;
-    s = 
-    return s;
+    ul = (unsigned long)va_arg(ap, void *);
+    return print(ft_ultoa(ul), flag);
 }
 
-char *x_to_string(va_list ap, int type)
+char *x_to_string(va_list ap, int type, pflag *flag)
 {
 
 }

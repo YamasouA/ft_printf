@@ -21,17 +21,17 @@ static contents	parse(const char *fmt, va_list ap)
 	if (*fmt == 'c' || *fmt == '%')
 		cont = new_contents(fmt, ap, fmt + 1);
 	else if (*fmt == 's')
-		cont = new_contents(fmt, ap, s_to_string(ap));
+		cont = new_contents(fmt, ap, s_to_string(ap, flag));
 	else if (*fmt == 'd' || *fmt == 'i')
-	 	cont = new_contents(fmt, ap, d_to_string(ap));
+	 	cont = new_contents(fmt, ap, d_to_string(ap, flag));
 	else if (*fmt == 'u')
-	    cont = new_contents(fmt, ap, u_to_string(ap));
+	    cont = new_contents(fmt, ap, u_to_string(ap, flag));
 	else if (*fmt == 'x')
-		cont = new_contents(fmt, ap, x_to_string(ap, 0));
+		cont = new_contents(fmt, ap, x_to_string(ap, 0, flag));
 	else if (*fmt == 'X')
-		cont = new_contents(fmt, ap, x_to_string(ap, 1));
+		cont = new_contents(fmt, ap, x_to_string(ap, 1, flag));
     else if (*fmt == 'p')
-        cont = new_contents(fmt, ap, p_to_string(ap));
+        cont = new_contents(fmt, ap, p_to_string(ap, flag));
 	cont->pflag = flag;
 	fmt++;
 	return cont;
@@ -111,7 +111,7 @@ size_t ft_printf(const char *fmt, ...)
 	while (*fmt)
 	{
 		p = fmt;
-		while (is_alnum(p))
+		while (*p != '%')
 		    p++;
 		if (p != fmt)
 		    cur->next = new_contents(fmt, ap, extract_text(fmt, p-fmt));
