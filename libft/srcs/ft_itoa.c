@@ -12,10 +12,10 @@
 
 #include "libft.h"
 
-static	int	count(int n)
+static	size_t	count(int n)
 {
 	long	n_cpy;
-	int		cnt;
+	size_t		cnt;
 
 	n_cpy = (long)n;
 	cnt = 0;
@@ -54,7 +54,7 @@ char	*ft_itoa(int n)
 
 	n_cpy = (long)n;
 	len = count(n);
-	ptr = (char *)malloc(sizeof(char) * (len + 1));
+	ptr = (char *)ft_calloc(len + 1, sizeof(char));
 	if (ptr == NULL)
 		return (NULL);
 	ptr_cpy = ptr;
@@ -69,11 +69,3 @@ char	*ft_itoa(int n)
 	return (ptr_cpy);
 }
 
-// #include "stdio.h"
-// int main()
-// {
-//     int i = 0;
-//     int j = -2;
-//     printf("%d: %s\n", i, ft_itoa(i));
-//     printf("%d: %s\n", j, ft_itoa(j));
-// }
