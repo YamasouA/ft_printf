@@ -31,14 +31,18 @@ char *p_to_string(va_list ap, pflag *flag)
     unsigned long ul;
 
     ul = (unsigned long)va_arg(ap, void *);
-    return print(ft_ultoa(ul, "0123456789"), flag);
+    return print(ft_ultoa(ul, "0123456789abcdef"), flag);
 }
 
 char *x_to_string(va_list ap, int type, pflag *flag)
 {
     char *base[2][16] = {"0123456789abcdef", "0123456789ABCDEF"};
     char *b;
+    long l;
 
     b = base[type];
+    l = va_arg(ap, long);
+
+    return print(ft_ltoa(l), flag);
 
 }

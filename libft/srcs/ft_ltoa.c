@@ -12,12 +12,12 @@
 
 #include "libft.h"
 
-static	size_t	count(int n)
+static	size_t	count(long long n)
 {
-	long long	n_cpy;
+	long	n_cpy;
 	size_t		cnt;
 
-	n_cpy = (long long)n;
+	n_cpy = (long)n;
 	cnt = 0;
 	if (n_cpy == 0)
 		return (1);
@@ -45,14 +45,13 @@ static	void	add_list(char *ptr, long n, int pos)
 	}
 }
 
-char	*ft_itoa(int n)
+char	*ft_ltoa(long long n)
 {
 	long long	n_cpy;
 	size_t		len;
 	char	*ptr;
 	char	*ptr_cpy;
 
-	n_cpy = (long long)n;
 	len = count(n);
 	ptr = (char *)ft_calloc(len + 1, sizeof(char));
 	if (ptr == NULL)
