@@ -1,5 +1,21 @@
 #include "ft_printf.h"
 
+ssize_t print(char *str, pflag *flag)
+{
+    if (flag->is_alignleft)
+        return print_with_alignleft(str);
+    if (flag->is_padding)
+        return print_with_padding(str);
+    if (flag->is_precision)
+        return print_with_precision(str);
+    if (flag->is_specifier)
+        return print_with_specifier(str);
+    if (flag->is_alignspace)
+        return print_with_alignspace(str);
+    if (flag->is_assign)
+        return print_with_alignspace(str);
+}
+
 char *u_to_string(va_list ap, pflag *flag)
 {
     unsigned int    n;
