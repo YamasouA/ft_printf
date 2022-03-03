@@ -8,12 +8,16 @@ typedef struct {
     bool is_specifier;
     bool is_alignspace;
     bool is_assign;
+    char *convert;
+    size_t precision;
+    size_t padding;
 } pflag;
 
 typedef struct contents;
 struct contents{
     size_t len;
     char *text;
+    
     contents *next;
     pflag *flag;
 }

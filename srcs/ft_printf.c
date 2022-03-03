@@ -24,20 +24,27 @@ char	*flag_char(char c, size_t n)
 char *apply_flag(char *str, pflag flag)
 {
 	if (flag->is_alignleft)
-		return ft_strjoin(flag_char(' ', ft_strlen(str)), str);
+		return ft_strjoin(flag_char('', ft_strlen(str)), str);
 	if (flag->is_padding)
-		return ft_strjoin();
+	{
+		if (ft_strlen(str) > flag->padding)
+			return str;
+		return ft_strjoin(flag_char('0', flag->padding - ft_strlen), str);
 	if (flag->is_precision)
-	    return ft_strjoin();
+	{
+		if (ft_strlen(str) > flag->precision)
+	    	return str;
+		return ft_strjoin(flag_char('0', flag->precision - ft_strlen(str)), str);
+	}
 	if (flag->is_specifier)
 		return ft_strjoin();
-	if (flag->is_alignspace)
+	if (flag->is_alignspace) // ' '
 	{
 		if (*str == '-')
 			return str;
 		return ft_strjoin(' ', str);
 	}
-	if (flag->is_assign)
+	if (flag->is_assign) // +
 	{
 		if (*str == '-')
 			return str;
