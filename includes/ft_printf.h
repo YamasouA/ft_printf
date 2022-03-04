@@ -11,6 +11,7 @@ typedef struct {
     char *convert;
     size_t precision;
     size_t padding;
+    size_t right_space;
 } pflag;
 
 typedef struct contents;
@@ -39,11 +40,11 @@ void apply_precision(contents *list);
 void apply_specifier(contents *list);
 void apply_alignspace(contents *list);
 void apply_assign(contents *list);
-char *u_to_string(va_list ap, pflag *flag);
-char *d_to_string(va_list ap, pflag *flag);
-char *s_to_string(va_list ap, pflag *flag);
-char *p_to_string(va_list ap, pflag *flag);
-char *x_to_string(va_list ap, int type, pflag *flag);
+char *u_to_string(va_list ap);
+char *d_to_string(va_list ap);
+char *s_to_string(va_list ap);
+char *p_to_string(va_list ap);
+char *x_to_string(va_list ap, int type);
 size_t concat_contents();
 contents *new_contents(const char *fmt, va_list ap, typekind kind);
 pflag *flag_consume(const char *fmt);

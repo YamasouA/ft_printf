@@ -15,10 +15,12 @@ contents *new_contents(const char *fmt, va_list ap, char *text)
 char	*flag_char(char c, size_t n)
 {
 	char *str;
+	char *tmp;
 
+	tmp = str;
 	while (n--)
 		*str++ = c;
-	return str;
+	return tmp;
 }
 
 char *apply_flag(char *str, pflag flag)
@@ -26,35 +28,78 @@ char *apply_flag(char *str, pflag flag)
 	if (flag->is_alignleft)
 		return ft_strjoin(flag_char('', ft_strlen(str)), str);
 	if (flag->is_padding)
-	{
-		if (ft_strlen(str) > flag->padding)
-			return str;
-		return ft_strjoin(flag_char('0', flag->padding - ft_strlen), str);
+		if (ft_strlen(str) <= flag->padding)
+			return ft_strjoin(flag_char('0', flag->padding - ft_strlen), str);
 	if (flag->is_precision)
-	{
-		if (ft_strlen(str) > flag->precision)
-	    	return str;
-		return ft_strjoin(flag_char('0', flag->precision - ft_strlen(str)), str);
-	}
+		if (ft_strlen(str) < flag->precision)
+			return ft_strjoin(flag_char('0', flag->precision - ft_strlen(str)), str);
 	if (flag->is_specifier)
 		return ft_strjoin();
 	if (flag->is_alignspace) // ' '
-	{
-		if (*str == '-')
-			return str;
-		return ft_strjoin(' ', str);
-	}
+		if (*str != '-')
+			return ft_strjoin(' ', str);
 	if (flag->is_assign) // +
+		if (*str != '-')
+			return ft_strjoin('+', str);
+	return str;
+}
+
+size_t consume_n(const char *fmt)
+{
+	int base;
+	size_t n;
+
+	base = 1;
+	while (*fmt)
 	{
-		if (*str == '-')
-			return str;
-		return ft_strjoin('+', str);
+		if (*fmt => '0' && *fmt <= '9')
+		{
+			n += *fmt - '0' * base;
+			base *= 10;
+		}
+		else
+			break;
 	}
+	return n;
 }
 
 pflag *flag_consume(const char *fmt)
 {
+	pflag	*flag;
 
+	flag = init_flag();
+	while (*fmt)
+	{
+		if (*fmt == '-')
+		{
+			*flag->is_alignleft = 1;
+			*flag->alignleft_n = consume_n(fmt);
+		}
+		else if (*fmt == '0')
+		{
+			*flag->is_padding = 1;
+			*flag->padding_n = consume_n(fmt);
+		}
+		else if (*fmt == '.')
+		{
+			*flag->is_precision = 1;
+			*flag->precision_n = consume_n(fmt);
+		}
+		else if (*fmt == '#')
+		{
+			*flag->is_convert = 1;
+			*flag->convert = consume_c(fmt);
+		}
+		else if (*fmt == ' ')
+		{
+			*flag->is_alignspace = 1;
+			*flag->alignspace_n = consume_n(fmt);
+
+		}
+		else if (*fmt == '+')
+			*flag->is_assign = 1;
+	}
+	return flag;
 }
 
 static contents	parse(const char *fmt, va_list ap)
@@ -104,22 +149,6 @@ void free_contents(contents *list)
 		free(list);
 		list = tmp;
 	}
-}
-
-void apply_flag(contents *list)
-{
-	if (list->flag->is_alignleft)
-	    apply_alignleft(list);
-	if (list->flag->is_padding)
-	    apply_padding(list)
-	if (list->flag->is_precision)
-	    apply_precision(list);
-	if (list->flag->is_specifier)
-	    apply_specifier(list);
-	if (list->flag->is_alignspace)
-	    apply_alignspace(list);
-	if (list->flag->is_assign)
-	    apply_assign(list);
 }
 
 int concat_contents(contents *list)
