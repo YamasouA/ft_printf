@@ -9,9 +9,10 @@ typedef struct {
     bool is_alignspace;
     bool is_assign;
     char *convert;
-    size_t precision;
-    size_t padding;
-    size_t right_space;
+    size_t precision_n;
+    size_t padding_n;
+    size_t alignleft_n;
+    size_t alignspace_n;
 } pflag;
 
 typedef struct contents;

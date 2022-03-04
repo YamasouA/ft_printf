@@ -23,24 +23,41 @@ char	*flag_char(char c, size_t n)
 	return tmp;
 }
 
+char *apply_padding(char *str, pflag *flag)
+{
+	if (flag->padding_n <= ft_strlen(str))
+		return str;
+	if (*str != '-')
+		str = ft_strjoin(flag_char('0', flag->padding_n - ft_strlen(str)), str);
+	return ft_insert(str, flag_char('0', flag->padding_n - ft_strlen(str)), 1);
+}
+
+char *apply_precision(char *str)
+{
+	if (flag->precision_n <= ft_strlen(str))
+		return str;
+	if (*str != '-')
+		str = ft_strjoin(flag_char('0', flag->precision_n - ft_strlen(str)), str);
+	return ft_insert(str, flag_char('0', flag->precision_n - ft_strlen(str)), 1);
+}
+
 char *apply_flag(char *str, pflag flag)
 {
-	if (flag->is_alignleft)
-		return ft_strjoin(flag_char('', ft_strlen(str)), str);
-	if (flag->is_padding)
-		if (ft_strlen(str) <= flag->padding)
-			return ft_strjoin(flag_char('0', flag->padding - ft_strlen), str);
-	if (flag->is_precision)
-		if (ft_strlen(str) < flag->precision)
-			return ft_strjoin(flag_char('0', flag->precision - ft_strlen(str)), str);
-	if (flag->is_specifier)
-		return ft_strjoin();
+	if (flag->is_alignleft) // '-'
+		str = ft_strjoin(str, flag_char(' ', flag->alignleft_n - ft_strlen(str)));
+	if (flag->is_padding) // '0'
+		str = apply_padding(str, flag); // strの先頭が-かどうかで処理が変わる
+			//return ft_strjoin(flag_char('0', flag->padding_n - ft_strlen), str);
+	if (flag->is_precision) // '.'
+		str = apply_precision(str, flag);
+	if (flag->is_specifier) // '#'
+		str = ft_strjoin();
 	if (flag->is_alignspace) // ' '
 		if (*str != '-')
-			return ft_strjoin(' ', str);
+			str = ft_strjoin(' ', str);
 	if (flag->is_assign) // +
 		if (*str != '-')
-			return ft_strjoin('+', str);
+			str = ft_strjoin('+', str);
 	return str;
 }
 
