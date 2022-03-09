@@ -1,16 +1,16 @@
 #include "ft_printf.h"
 #include "libft.h"
 
-contents *new_contents(const char *fmt, va_list ap, char *text)
-{
-	contents *cont;
+// contents *new_contents(const char *fmt, va_list ap, char *text)
+// {
+// 	contents *cont;
 
-	cont->text = text;
-	cont->len = ft_strlen(text);
-	cont->next = NULL;
-	cont->flag = NULL;
-	return cont;
-}
+// 	cont->text = text;
+// 	cont->len = ft_strlen(text);
+// 	cont->next = NULL;
+// 	cont->flag = NULL;
+// 	return cont;
+// }
 
 char	*flag_char(char c, size_t n)
 {
@@ -119,7 +119,13 @@ pflag *flag_consume(const char *fmt)
 	return flag;
 }
 
-static contents	parse(const char *fmt, va_list ap)
+size_t	write_str(char *str)
+{
+	ft_putstr_fd(str, 1);
+	return ft_strlen(str);
+}
+
+size_t	parse(const char *fmt, va_list ap)
 {
 	contents cont;
 	pflag *flag;
@@ -140,77 +146,94 @@ static contents	parse(const char *fmt, va_list ap)
 		str = x_to_string(ap, 1);
     else if (*fmt == 'p')
         str = p_to_string(ap);
-	cont = apply_flag(str, flag);
+	str = apply_flag(str, flag);
 	fmt++;
-	return cont;
+	return write_str(str);
 }
 
-char *extract_text(const char *fmt, size_t len)
+size_t extract_text(const char *fmt, size_t len)
 {
     char *s;
     s = ft_calloc(1, len);
     while (len--)
         *s++ = *fmt++;
-    return s;
+	
+	ft_putstr_fd(str, 1);
+    return ft_strlen(str);
 }
 
-void free_contents(contents *list)
+// void free_contents(contents *list)
+// {
+// 	contents *tmp;
+
+// 	while (list != NULL)
+// 	{
+//         tmp = list->next;
+// 		free(list->text);
+// 		free(list->pflag);
+// 		free(list);
+// 		list = tmp;
+// 	}
+// }
+
+// int concat_contents(contents *list)
+// {
+// 	int len;
+// 	contents *list_cpy;
+
+//     len = 0;
+// 	list_cpy = list;
+// 	while (list_cpy != NULL)
+//     {
+//         if (list_cpy->flag != NULL)
+// 		    apply_flag(list_cpy);
+// 		len += list_cpy->len;
+// 		ft_putstr_fd(list->text, 1);
+// 		list_cpy = list_cpy->next;
+// 	}
+// 	free_contents(list);
+// 	return len;
+// }
+
+int check_len(int total_len, size_t write_len)
 {
-	contents *tmp;
+	int tmp;
 
-	while (list != NULL)
-	{
-        tmp = list->next;
-		free(list->text);
-		free(list->pflag);
-		free(list);
-		list = tmp;
-	}
+	tmp = total_len;
+	if (total_len + write_len < total_len)
+		return (1);
+	return (0);
 }
 
-int concat_contents(contents *list)
-{
-	int len;
-	contents *list_cpy;
-
-    len = 0;
-	list_cpy = list;
-	while (list_cpy != NULL)
-    {
-        if (list_cpy->flag != NULL)
-		    apply_flag(list_cpy);
-		len += list_cpy->len;
-		ft_putstr_fd(list->text, 1);
-		list_cpy = list_cpy->next;
-	}
-	free_contents(list);
-	return len;
-}
-
-size_t ft_printf(const char *fmt, ...)
+int ft_printf(const char *fmt, ...)
 {
 	va_list	ap;
-	contents head;
-	contents *cur;
+	// contents head;
+	// contents *cur;
 	char *p;
 	char *text;
+	int	total_len;
+	int write_len;
 
-	head->next = NULL;
-	cur = &head;
+
+	// head->next = NULL;
+	// cur = &head;
 	if (fmt == NULL)
 		return (-1);
 	va_start(ap, fmt);
 	while (*fmt)
 	{
 		p = fmt;
-		while (*p != '%')
+		while (*p != '%' & *p)
 		    p++;
 		if (p != fmt)
-		    cur->next = new_contents(fmt, ap, extract_text(fmt, p-fmt));
-		else if (*fmt == '%')
-		    cur->next = parse(++fmt, ap);
-	    cur = cur->next;
+		    write_len = extract_text(fmt, p-fmt)
+		else // *fmt == '%'
+		    write_len = parse(++fmt, ap);
+	    if (write_len < 0 || check_len(write_len, total_len))
+			return (-1);
+		total_len += write_len;
 	}
 	va_end(ap);
-	return concat_contents(head->next);
+	return (total_len);
 }
