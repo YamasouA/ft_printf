@@ -122,6 +122,7 @@ pflag *flag_consume(const char *fmt)
 size_t	write_str(char *str)
 {
 	ft_putstr_fd(str, 1);
+	free(str);
 	return ft_strlen(str);
 }
 
@@ -153,13 +154,13 @@ size_t	parse(const char *fmt, va_list ap)
 
 size_t extract_text(const char *fmt, size_t len)
 {
-    char *s;
-    s = ft_calloc(1, len);
+    char *str;
+
+    str = ft_calloc(1, len);
     while (len--)
-        *s++ = *fmt++;
+        *str++ = *fmt++;
 	
-	ft_putstr_fd(str, 1);
-    return ft_strlen(str);
+	return write_str(str);
 }
 
 // void free_contents(contents *list)
