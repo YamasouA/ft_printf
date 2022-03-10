@@ -2,23 +2,31 @@ CC = gcc
 INCLUDE = ft_printf.h
 CFLAGS = -Wall -Wextra -Werror
 NAME = libftprintf.a
-SRCS = ft_printf.c\
+LIBFT = libft/libft.a
+SRCS_DIR = srcs/
+SRCS_FILES = ft_printf.c\
 		ft_printf_c.c\
 		ft_printf_d.c\
 		ft_printf_h.c\
 		ft_printf_s.c\
 		ft_printf_u.c\
-		ft_printf_p.c
+		ft_printf_p.c\
+		udsp_to_string.c\
 
-OBJS = $(SRCS:.c=.o)
+SRCS := $(addprefix $(SRCS_DIR), $(SRCS_FILES))
+OBJS := $(SRCS:%.c=%.o)
 
 all: $(NAME)
 
-$(NAME) : $(OBJS)
-	ar rc $@ $^
+$(NAME) : $(OBJS) $(LIBFT)
+	cp $(LIBFT) $@
+	ar rc $@ $(OBJS)
 
 %.o:%.c
-	$(CC) $(CFLAGS) -I./$(INCLUDE) -c $< -o $@
+	$(CC) $(CFLAGS) -o $@ -c $< 
+
+$(LIBFT):
+	make -C libft
 
 clean:
 	rm -f $(OBJS)

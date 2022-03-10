@@ -1,5 +1,5 @@
 #include "ft_printf.h"
-#include "libft.h"
+
 
 // contents *new_contents(const char *fmt, va_list ap, char *text)
 // {
@@ -32,7 +32,7 @@ char *apply_padding(char *str, pflag *flag)
 	return ft_insert(str, flag_char('0', flag->padding_n - ft_strlen(str)), 1);
 }
 
-char *apply_precision(char *str)
+char *apply_precision(char *str, pflag *flag)
 {
 	if (flag->precision_n <= ft_strlen(str))
 		return str;
@@ -49,7 +49,7 @@ char	*apply_convert(char *str, pflag *flag)
 		return ;
 }
 
-char *apply_flag(char *str, pflag flag)
+char *apply_flag(char *str, pflag *flag)
 {
 	if (flag->is_alignleft) // '-'
 		str = ft_strjoin(str, flag_char(' ', flag->alignleft_n - ft_strlen(str)));
@@ -86,6 +86,24 @@ size_t consume_n(const char *fmt)
 			break;
 	}
 	return n;
+}
+
+pflag *init_flag()
+{
+	pflag	*flag;
+
+	flag->is_alignleft = 0;
+	flag->is_padding = 0;
+	flag->is_precision = 0;
+	flag->is_specifier = 0;
+	flag->is_alignspace = 0;
+	flag->is_assign = 0;
+	flag->convert = NULL;
+	flag->precision_n = 0;
+	flag->padding_n = 0;
+	flag->alignleft_n = 0;
+	flag->alignspace_n = 0;
+	return flag;
 }
 
 pflag *flag_consume(const char *fmt)
