@@ -23,6 +23,16 @@ char	*flag_char(char c, size_t n)
 	return tmp;
 }
 
+// 直せ
+char	*ft_insert(char *str, char *str2, size_t n)
+{
+	size_t	len;
+
+	len = ft_strlen(str) + ft_strlen(str2);
+	len = n;
+	return str;
+}
+
 char *apply_padding(char *str, pflag *flag)
 {
 	if (flag->padding_n <= ft_strlen(str))
@@ -41,12 +51,15 @@ char *apply_precision(char *str, pflag *flag)
 	return ft_insert(str, flag_char('0', flag->precision_n - ft_strlen(str)), 1);
 }
 
+char	*str_to_hex(char *str)
+{
+	return str;
+}
 char	*apply_convert(char *str, pflag *flag)
 {
-	if (flag->convert == 'o')
-		return str_to_hex();
-	if (flag->convert == '')
-		return ;
+	if (*flag->convert == 'o')
+		return str_to_hex(str);
+	return str;
 }
 
 char *apply_flag(char *str, pflag *flag)
@@ -62,10 +75,10 @@ char *apply_flag(char *str, pflag *flag)
 		str = apply_convert(str, flag);;
 	if (flag->is_alignspace) // ' '
 		if (*str != '-')
-			str = ft_strjoin(' ', str);
+			str = ft_strjoin(" ", str);
 	if (flag->is_assign) // +
 		if (*str != '-')
-			str = ft_strjoin('+', str);
+			str = ft_strjoin("+", str);
 	return str;
 }
 
@@ -75,9 +88,10 @@ size_t consume_n(const char *fmt)
 	size_t n;
 
 	base = 1;
+	n = 0;
 	while (*fmt)
 	{
-		if (*fmt => '0' && *fmt <= '9')
+		if (*fmt >= '0' && *fmt <= '9')
 		{
 			n += *fmt - '0' * base;
 			base *= 10;
@@ -92,6 +106,7 @@ pflag *init_flag()
 {
 	pflag	*flag;
 
+	flag = ft_calloc(1, sizeof(pflag));
 	flag->is_alignleft = 0;
 	flag->is_padding = 0;
 	flag->is_precision = 0;
@@ -115,32 +130,33 @@ pflag *flag_consume(const char *fmt)
 	{
 		if (*fmt == '-')
 		{
-			*flag->is_alignleft = 1;
-			*flag->alignleft_n = consume_n(fmt);
+			flag->is_alignleft = 1;
+			flag->alignleft_n = consume_n(fmt);
 		}
 		else if (*fmt == '0')
 		{
-			*flag->is_padding = 1;
-			*flag->padding_n = consume_n(fmt);
+			flag->is_padding = 1;
+			flag->padding_n = consume_n(fmt);
 		}
 		else if (*fmt == '.')
 		{
-			*flag->is_precision = 1;
-			*flag->precision_n = consume_n(fmt);
+			flag->is_precision = 1;
+			flag->precision_n = consume_n(fmt);
 		}
 		else if (*fmt == '#')
 		{
-			*flag->is_convert = 1;
-			*flag->convert = consume_c(fmt);
+			flag->is_specifier = 1;
+			flag->convert = *(++fmt);
 		}
 		else if (*fmt == ' ')
 		{
-			*flag->is_alignspace = 1;
-			*flag->alignspace_n = consume_n(fmt);
+			flag->is_alignspace = 1;
+			flag->alignspace_n = consume_n(fmt);
 
 		}
 		else if (*fmt == '+')
-			*flag->is_assign = 1;
+			flag->is_assign = 1;
+		fmt++;
 	}
 	return flag;
 }
@@ -154,13 +170,13 @@ size_t	write_str(char *str)
 
 size_t	parse(const char *fmt, va_list ap)
 {
-	contents cont;
+	// contents cont;
 	pflag *flag;
 	char	*str;
 
     flag = flag_consume(fmt);
 	if (*fmt == 'c' || *fmt == '%')
-		str = *fmt;
+		str = (char *)fmt;
 	else if (*fmt == 's')
 		str = s_to_string(ap);
 	else if (*fmt == 'd' || *fmt == 'i')
@@ -173,6 +189,8 @@ size_t	parse(const char *fmt, va_list ap)
 		str = x_to_string(ap, 1);
     else if (*fmt == 'p')
         str = p_to_string(ap);
+	else // 適当
+		str = (char *)fmt;
 	str = apply_flag(str, flag);
 	fmt++;
 	return write_str(str);
@@ -227,7 +245,8 @@ int check_len(int total_len, size_t write_len)
 	int tmp;
 
 	tmp = total_len;
-	if (total_len + write_len < total_len)
+	total_len += write_len;
+	if (total_len < tmp)
 		return (1);
 	return (0);
 }
@@ -238,7 +257,7 @@ int ft_printf(const char *fmt, ...)
 	// contents head;
 	// contents *cur;
 	char *p;
-	char *text;
+	// char *text;
 	int	total_len;
 	int write_len;
 
@@ -247,14 +266,15 @@ int ft_printf(const char *fmt, ...)
 	// cur = &head;
 	if (fmt == NULL)
 		return (-1);
+	total_len = 0;
 	va_start(ap, fmt);
 	while (*fmt)
 	{
-		p = fmt;
-		while (*p != '%' & *p)
+		p = (char *)fmt;
+		while (*p != '%' && *p)
 		    p++;
 		if (p != fmt)
-		    write_len = extract_text(fmt, p-fmt)
+		    write_len = extract_text(fmt, p-fmt);
 		else // *fmt == '%'
 		    write_len = parse(++fmt, ap);
 	    if (write_len < 0 || check_len(write_len, total_len))
