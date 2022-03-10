@@ -41,6 +41,14 @@ char *apply_precision(char *str)
 	return ft_insert(str, flag_char('0', flag->precision_n - ft_strlen(str)), 1);
 }
 
+char	*apply_convert(char *str, pflag *flag)
+{
+	if (flag->convert == 'o')
+		return str_to_hex();
+	if (flag->convert == '')
+		return ;
+}
+
 char *apply_flag(char *str, pflag flag)
 {
 	if (flag->is_alignleft) // '-'
@@ -51,7 +59,7 @@ char *apply_flag(char *str, pflag flag)
 	if (flag->is_precision) // '.'
 		str = apply_precision(str, flag);
 	if (flag->is_specifier) // '#'
-		str = ft_strjoin();
+		str = apply_convert(str, flag);;
 	if (flag->is_alignspace) // ' '
 		if (*str != '-')
 			str = ft_strjoin(' ', str);

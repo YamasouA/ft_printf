@@ -15,10 +15,17 @@
 void	ft_putstr_fd(char *s, int fd)
 {
 	size_t	len;
+	size_t	idx;
 
-	if (s == NULL)
+	if (!s)
 		return ;
+	idx = 0;
 	len = ft_strlen(s);
-	while (len--)
-		write(fd, s++, 1);
+	while (len > INT_MAX)
+	{
+		write(fd, s, INT_MAX);
+		len -= INT_MAX;
+		s += INT_MAX;
+	}
+	write(fd, s, len);
 }
