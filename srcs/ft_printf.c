@@ -14,13 +14,17 @@
 
 char	*flag_char(char c, size_t n)
 {
-	char *str;
-	char *tmp;
+	// char *str;
+	// size_t	idx;
 
-	tmp = str;
+	// idx = n;
+	// while (n--)
+	// 	str[idx-n] = c;
+	// return str;
 	while (n--)
-		*str++ = c;
-	return tmp;
+	{
+		ft_putchar_fd(c, 1);
+	}
 }
 
 // 直せ
@@ -33,22 +37,37 @@ char	*ft_insert(char *str, char *str2, size_t n)
 	return str;
 }
 
-char *apply_padding(char *str, pflag *flag)
-{
-	if (flag->padding_n <= ft_strlen(str))
-		return str;
-	if (*str != '-')
-		str = ft_strjoin(flag_char('0', flag->padding_n - ft_strlen(str)), str);
-	return ft_insert(str, flag_char('0', flag->padding_n - ft_strlen(str)), 1);
-}
+// char *apply_padding(char *str, pflag *flag)
+// {
+// 	if (flag->padding_n <= ft_strlen(str))
+// 		return str;
+// 	if (*str != '-')
+// 		str = ft_strjoin(flag_char('0', flag->padding_n - ft_strlen(str)), str);
+// 	return ft_insert(str, flag_char('0', flag->padding_n - ft_strlen(str)), 1);
+// }
 
-char *apply_precision(char *str, pflag *flag)
+// char *apply_precision(char *str, pflag *flag)
+// {
+// 	if (flag->precision_n <= ft_strlen(str))
+// 		return str;
+// 	if (*str != '-')
+// 		str = ft_strjoin(flag_char('0', flag->precision_n - ft_strlen(str)), str);
+// 	return ft_insert(str, flag_char('0', flag->precision_n - ft_strlen(str)), 1);
+// }
+
+char *apply_width(char *str, char c, size_t width)
 {
-	if (flag->precision_n <= ft_strlen(str))
-		return str;
-	if (*str != '-')
-		str = ft_strjoin(flag_char('0', flag->precision_n - ft_strlen(str)), str);
-	return ft_insert(str, flag_char('0', flag->precision_n - ft_strlen(str)), 1);
+	char *str2;
+
+	str2 = (char *)ft_calloc(width);
+	while (width--)
+		*str2++ = c;
+	if (c == )
+		str = ft_strjoin(str, str2);
+	else
+		str = ft_strjoin(str2, str);
+	free(str2);
+	return (str);
 }
 
 char	*str_to_hex(char *str)
