@@ -12,28 +12,48 @@
 // 	return cont;
 // }
 
-char	*flag_char(char c, size_t n)
+char	*flag_char(char *str, char c, size_t n)
 {
-	// char *str;
-	// size_t	idx;
+	char *str;
+	size_t	idx;
+	size_t	len;
 
-	// idx = n;
-	// while (n--)
-	// 	str[idx-n] = c;
-	// return str;
+	len = n - ft_strlen(str);
+	if (len <= 0)
+		return (NULL);
+
+	idx = n;
 	while (n--)
-	{
-		ft_putchar_fd(c, 1);
-	}
+		str[idx-n] = c;
+	return str;
 }
 
 // 直せ
 char	*ft_insert(char *str, char *str2, size_t n)
 {
-	size_t	len;
+	size_t	str_len;
+	size_t	str2_len;
+	size_t	cnt;
+	char *str_join;
 
-	len = ft_strlen(str) + ft_strlen(str2);
-	len = n;
+	str_len = ft_strlen(str);
+	str2_len = ft_strlen(str2);
+	str_join = (char *)ft_calloc(str_len + str2_len);
+	if (!str_join)
+		return (NULL);
+	cnt = 0;
+	while (str_len--)
+	{
+		if (cnt == n)
+		{
+			*str_join++ = *str2++;
+			str2_len--;
+		}
+		*str_join++ = *str++;
+		cnt++;
+	}
+	while (str2_len--)
+		*str_join++ = *str2++;
 	return str;
 }
 
@@ -55,17 +75,18 @@ char	*ft_insert(char *str, char *str2, size_t n)
 // 	return ft_insert(str, flag_char('0', flag->precision_n - ft_strlen(str)), 1);
 // }
 
-char *apply_width(char *str, char c, size_t width)
+char *apply_width(char *str1, char *str2, int insert)
 {
-	char *str2;
+	char	*str;
 
-	str2 = (char *)ft_calloc(width);
-	while (width--)
-		*str2++ = c;
-	if (c == )
-		str = ft_strjoin(str, str2);
+	if (!str1 || !str2)
+		return (NULL);
+	str = (char *)ft_calloc(ft_strlen(str1) + ft_strlen(str2));
+	if (insert==1)
+		str = ft_insert(str1, str2, 1);
 	else
-		str = ft_strjoin(str2, str);
+		str = ft_strjoin(str1, str2);
+	free(str1);
 	free(str2);
 	return (str);
 }
@@ -84,20 +105,20 @@ char	*apply_convert(char *str, pflag *flag)
 char *apply_flag(char *str, pflag *flag)
 {
 	if (flag->is_alignleft) // '-'
-		str = ft_strjoin(str, flag_char(' ', flag->alignleft_n - ft_strlen(str)));
+		str = apply_width(str, flag_char(str, ' ', flag->field_width), 0);
 	if (flag->is_padding) // '0'
-		str = apply_padding(str, flag); // strの先頭が-かどうかで処理が変わる
-			//return ft_strjoin(flag_char('0', flag->padding_n - ft_strlen), str);
+		// str = apply_padding(str, flag); // strの先頭が-かどうかで処理が変わる
+		str = apply_width(str, flag_char(str, '0', flag->field_width), 1);
 	if (flag->is_precision) // '.'
-		str = apply_precision(str, flag);
-	if (flag->is_specifier) // '#'
-		str = apply_convert(str, flag);;
-	if (flag->is_alignspace) // ' '
-		if (*str != '-')
-			str = ft_strjoin(" ", str);
-	if (flag->is_assign) // +
-		if (*str != '-')
-			str = ft_strjoin("+", str);
+		str = apply_width(str, flag_char(str, '0', flag->field_width), 1);
+	// if (flag->is_specifier) // '#'
+	// 	str = apply_convert(str, flag);;
+	// if (flag->is_alignspace) // ' '
+	// 	if (*str != '-')
+	// 		str = ft_strjoin(" ", str);
+	// if (flag->is_assign) // +
+	// 	if (*str != '-')
+	// 		str = ft_strjoin("+", str);
 	return str;
 }
 
@@ -126,6 +147,8 @@ pflag *init_flag()
 	pflag	*flag;
 
 	flag = ft_calloc(1, sizeof(pflag));
+	if (!flag)
+		return (NULL);
 	flag->is_alignleft = 0;
 	flag->is_padding = 0;
 	flag->is_precision = 0;
@@ -145,6 +168,8 @@ pflag *flag_consume(const char *fmt)
 	pflag	*flag;
 
 	flag = init_flag();
+	if (!flag)
+		return (NULL);
 	while (*fmt)
 	{
 		if (*fmt == '-')
@@ -187,6 +212,12 @@ size_t	write_str(char *str)
 	return ft_strlen(str);
 }
 
+pflag *flag_priority(pflag flag)
+{
+	if (!flag)
+		return (NULL);
+}
+
 size_t	parse(const char *fmt, va_list ap)
 {
 	// contents cont;
@@ -194,6 +225,9 @@ size_t	parse(const char *fmt, va_list ap)
 	char	*str;
 
     flag = flag_consume(fmt);
+	flag = flag_priority(flag);
+	if (!flag)
+		return (-1);
 	if (*fmt == 'c' || *fmt == '%')
 		str = (char *)fmt;
 	else if (*fmt == 's')
