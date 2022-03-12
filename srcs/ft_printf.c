@@ -12,16 +12,16 @@
 // 	return cont;
 // }
 
-char	*flag_char(char *str, char c, size_t n)
+char	*flag_char(char *str1, char c, size_t n)
 {
 	char *str;
 	size_t	idx;
 	size_t	len;
 
-	len = n - ft_strlen(str);
+	len = n - ft_strlen(str1);
 	if (len <= 0)
 		return (NULL);
-
+	str = (char *)ft_calloc(len, 1);
 	idx = n;
 	while (n--)
 		str[idx-n] = c;
@@ -38,7 +38,7 @@ char	*ft_insert(char *str, char *str2, size_t n)
 
 	str_len = ft_strlen(str);
 	str2_len = ft_strlen(str2);
-	str_join = (char *)ft_calloc(str_len + str2_len);
+	str_join = (char *)ft_calloc(str_len + str2_len, 1);
 	if (!str_join)
 		return (NULL);
 	cnt = 0;
@@ -81,7 +81,7 @@ char *apply_width(char *str1, char *str2, int insert)
 
 	if (!str1 || !str2)
 		return (NULL);
-	str = (char *)ft_calloc(ft_strlen(str1) + ft_strlen(str2));
+	str = (char *)ft_calloc(ft_strlen(str1) + ft_strlen(str2), 1);
 	if (insert==1)
 		str = ft_insert(str1, str2, 1);
 	else
@@ -156,10 +156,8 @@ pflag *init_flag()
 	flag->is_alignspace = 0;
 	flag->is_assign = 0;
 	flag->convert = NULL;
-	flag->precision_n = 0;
-	flag->padding_n = 0;
-	flag->alignleft_n = 0;
-	flag->alignspace_n = 0;
+	flag->field_width = 0;
+	flag->precision = 0;
 	return flag;
 }
 
@@ -175,31 +173,31 @@ pflag *flag_consume(const char *fmt)
 		if (*fmt == '-')
 		{
 			flag->is_alignleft = 1;
-			flag->alignleft_n = consume_n(fmt);
+			flag->field_width = consume_n(fmt);
 		}
 		else if (*fmt == '0')
 		{
 			flag->is_padding = 1;
-			flag->padding_n = consume_n(fmt);
+			flag->field_width = consume_n(fmt);
 		}
 		else if (*fmt == '.')
 		{
 			flag->is_precision = 1;
-			flag->precision_n = consume_n(fmt);
+			flag->precision = consume_n(fmt);
 		}
-		else if (*fmt == '#')
-		{
-			flag->is_specifier = 1;
-			flag->convert = *(++fmt);
-		}
-		else if (*fmt == ' ')
-		{
-			flag->is_alignspace = 1;
-			flag->alignspace_n = consume_n(fmt);
+		// else if (*fmt == '#')
+		// {
+		// 	flag->is_specifier = 1;
+		// 	flag->convert = *(++fmt);
+		// }
+		// else if (*fmt == ' ')
+		// {
+		// 	flag->is_alignspace = 1;
+		// 	flag->alignspace_n = consume_n(fmt);
 
-		}
-		else if (*fmt == '+')
-			flag->is_assign = 1;
+		// }
+		// else if (*fmt == '+')
+		// 	flag->is_assign = 1;
 		fmt++;
 	}
 	return flag;
@@ -212,10 +210,11 @@ size_t	write_str(char *str)
 	return ft_strlen(str);
 }
 
-pflag *flag_priority(pflag flag)
+pflag *flag_priority(pflag *flag)
 {
 	if (!flag)
 		return (NULL);
+	return (flag);
 }
 
 size_t	parse(const char *fmt, va_list ap)

@@ -22,7 +22,7 @@ char *s_to_string(va_list ap)
 
     s = va_arg(ap, char *);
     if (!s)
-        *s = "(null)";
+        s = "(null)";
     return ft_strdup(s);
 }
 
@@ -36,7 +36,7 @@ char *p_to_string(va_list ap)
 
 char *x_to_string(va_list ap, int type)
 {
-    char *base[2][16] = {"0123456789abcdef", "0123456789ABCDEF"};
+    char base[2][16] = {"0123456789abcdef", "0123456789ABCDEF"};
     char *b;
     long long l;
 

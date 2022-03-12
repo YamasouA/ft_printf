@@ -27,7 +27,7 @@ static	size_t	count(unsigned long n)
 	return (cnt);
 }
 
-static	void	add_list(char *ptr, unsigned long n, size_t pos, char *base)
+static	void	add_list(char *ptr, unsigned long n, size_t pos)
 {
 	if (n <= 15)
 		ptr[pos] = n + '0';
@@ -38,7 +38,7 @@ static	void	add_list(char *ptr, unsigned long n, size_t pos, char *base)
 	}
 }
 
-char	*ft_ultoa(unsigned long n, char *base)
+char	*ft_ultoa(unsigned long n)
 {
 	size_t		len;
 	char	*ptr;
@@ -49,7 +49,7 @@ char	*ft_ultoa(unsigned long n, char *base)
 	if (ptr == NULL)
 		return (NULL);
 	ptr_cpy = ptr;
-	add_list(ptr, n, len - 1, base);
+	add_list(ptr, n, len - 1);
 	ptr += len;
 	*ptr = '\0';
 	return (ptr_cpy);

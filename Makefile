@@ -5,12 +5,6 @@ NAME = libftprintf.a
 LIBFT = libft/libft.a
 SRCS_DIR = srcs/
 SRCS_FILES = ft_printf.c\
-		ft_printf_c.c\
-		ft_printf_d.c\
-		ft_printf_h.c\
-		ft_printf_s.c\
-		ft_printf_u.c\
-		ft_printf_p.c\
 		udsp_to_string.c\
 
 SRCS := $(addprefix $(SRCS_DIR), $(SRCS_FILES))
