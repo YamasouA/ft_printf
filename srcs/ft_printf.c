@@ -1,17 +1,5 @@
 #include "../includes/ft_printf.h"
 
-
-// contents *new_contents(const char *fmt, va_list ap, char *text)
-// {
-// 	contents *cont;
-
-// 	cont->text = text;
-// 	cont->len = ft_strlen(text);
-// 	cont->next = NULL;
-// 	cont->flag = NULL;
-// 	return cont;
-// }
-
 char	*flag_char(char *str1, char c, size_t n)
 {
 	char *str;
@@ -25,10 +13,9 @@ char	*flag_char(char *str1, char c, size_t n)
 	idx = n;
 	while (n--)
 		str[idx-n] = c;
-	return str;
+	return (str);
 }
 
-// 直せ
 char	*ft_insert(char *str, char *str2, size_t n)
 {
 	size_t	str_len;
@@ -54,30 +41,8 @@ char	*ft_insert(char *str, char *str2, size_t n)
 	}
 	while (str2_len--)
 		*str_join++ = *str2++;
-	return str;
+	return (str);
 }
-
-char *sss()
-{
-	return "c";
-}
-// char *apply_padding(char *str, pflag *flag)
-// {
-// 	if (flag->padding_n <= ft_strlen(str))
-// 		return str;
-// 	if (*str != '-')
-// 		str = ft_strjoin(flag_char('0', flag->padding_n - ft_strlen(str)), str);
-// 	return ft_insert(str, flag_char('0', flag->padding_n - ft_strlen(str)), 1);
-// }
-
-// char *apply_precision(char *str, pflag *flag)
-// {
-// 	if (flag->precision_n <= ft_strlen(str))
-// 		return str;
-// 	if (*str != '-')
-// 		str = ft_strjoin(flag_char('0', flag->precision_n - ft_strlen(str)), str);
-// 	return ft_insert(str, flag_char('0', flag->precision_n - ft_strlen(str)), 1);
-// }
 
 char *apply_width(char *str1, char *str2, int insert)
 {
@@ -103,7 +68,7 @@ char	*apply_convert(char *str, pflag *flag)
 {
 	if (*flag->convert == 'o')
 		return str_to_hex(str);
-	return str;
+	return (str);
 }
 
 char *apply_flag(char *str, pflag *flag)
@@ -112,9 +77,11 @@ char *apply_flag(char *str, pflag *flag)
 		str = apply_width(str, flag_char(str, ' ', flag->field_width), 0);
 	if (flag->is_padding) // '0'
 		// str = apply_padding(str, flag); // strの先頭が-かどうかで処理が変わる
+		// 文字列の先頭が'-'の場合は'-'をfield_widthにカウントする
 		str = apply_width(str, flag_char(str, '0', flag->field_width), 1);
 	if (flag->is_precision) // '.'
-		str = apply_width(str, flag_char(str, '0', flag->field_width), 1);
+		// 文字列の先頭が'-'の場合は'-'をfield_widthにカウントしない
+		str = apply_width(str, flag_char(str, '0', flag->field_width - 1), 1);
 	// if (flag->is_specifier) // '#'
 	// 	str = apply_convert(str, flag);;
 	// if (flag->is_alignspace) // ' '
@@ -123,7 +90,7 @@ char *apply_flag(char *str, pflag *flag)
 	// if (flag->is_assign) // +
 	// 	if (*str != '-')
 	// 		str = ft_strjoin("+", str);
-	return str;
+	return (str);
 }
 
 size_t consume_n(const char *fmt)
@@ -134,7 +101,7 @@ size_t consume_n(const char *fmt)
 	base = 1;
 	n = 0;
 	if (*fmt == '-')
-		return n;
+		return (n);
 	while (*fmt)
 	{
 		if (*fmt >= '0' && *fmt <= '9')
@@ -145,7 +112,7 @@ size_t consume_n(const char *fmt)
 		else
 			break;
 	}
-	return n;
+	return (n);
 }
 
 pflag *init_flag()
@@ -155,16 +122,16 @@ pflag *init_flag()
 	flag = ft_calloc(1, sizeof(pflag));
 	if (!flag)
 		return (NULL);
-	flag->is_alignleft = 0;
-	flag->is_padding = 0;
-	flag->is_precision = 0;
-	flag->is_specifier = 0;
-	flag->is_alignspace = 0;
-	flag->is_assign = 0;
+	flag->is_alignleft = false;
+	flag->is_padding = false;
+	flag->is_precision = false;
+	flag->is_specifier = false;
+	flag->is_alignspace = false;
+	flag->is_assign = false;
 	flag->convert = NULL;
 	flag->field_width = 0;
 	flag->precision = 0;
-	return flag;
+	return (flag);
 }
 
 pflag *flag_consume(const char *fmt)
@@ -206,14 +173,14 @@ pflag *flag_consume(const char *fmt)
 		// 	flag->is_assign = 1;
 		fmt++;
 	}
-	return flag;
+	return (flag);
 }
 
 size_t	write_str(char *str)
 {
 	ft_putstr_fd(str, 1);
 	free(str);
-	return ft_strlen(str);
+	return (ft_strlen(str));
 }
 
 pflag *flag_priority(pflag *flag)
@@ -234,7 +201,7 @@ size_t	parse(const char *fmt, va_list ap)
     flag = flag_consume(fmt);
 	flag = flag_priority(flag);
 	if (!flag)
-		return (-1);
+		return (LONG_MAX);
 	if (*fmt == 'c' || *fmt == '%')
 		str = (char *)fmt;
 	else if (*fmt == 's')
@@ -253,7 +220,7 @@ size_t	parse(const char *fmt, va_list ap)
 		str = (char *)fmt;
 	str = apply_flag(str, flag);
 	fmt++;
-	return write_str(str);
+	return (write_str(str));
 }
 
 size_t extract_text(const char *fmt, size_t len)
@@ -264,42 +231,10 @@ size_t extract_text(const char *fmt, size_t len)
     while (len--)
         *str++ = *fmt++;
 	
-	return write_str(str);
+	return (write_str(str));
 }
 
-// void free_contents(contents *list)
-// {
-// 	contents *tmp;
-
-// 	while (list != NULL)
-// 	{
-//         tmp = list->next;
-// 		free(list->text);
-// 		free(list->pflag);
-// 		free(list);
-// 		list = tmp;
-// 	}
-// }
-
-// int concat_contents(contents *list)
-// {
-// 	int len;
-// 	contents *list_cpy;
-
-//     len = 0;
-// 	list_cpy = list;
-// 	while (list_cpy != NULL)
-//     {
-//         if (list_cpy->flag != NULL)
-// 		    apply_flag(list_cpy);
-// 		len += list_cpy->len;
-// 		ft_putstr_fd(list->text, 1);
-// 		list_cpy = list_cpy->next;
-// 	}
-// 	free_contents(list);
-// 	return len;
-// }
-
+// ここは直さないといない
 int check_len(int total_len, size_t write_len)
 {
 	int tmp;
@@ -320,7 +255,6 @@ int ft_printf(const char *fmt, ...)
 	// char *text;
 	int	total_len;
 	int write_len;
-
 
 	// head->next = NULL;
 	// cur = &head;

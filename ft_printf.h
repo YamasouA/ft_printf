@@ -18,14 +18,6 @@ typedef struct {
     size_t precision;
 } pflag;
 
-// typedef struct contents contents;
-// struct contents{
-//     size_t len;
-//     char *text;
-    
-//     contents *next;
-//     pflag *flag;
-// };
 int ft_printf(const char *fmt, ...);
 int	put_chr(va_list ap);
 int	put_str(va_list ap);
@@ -48,5 +40,4 @@ char *x_to_string(va_list ap, int type);
 // contents *new_contents(const char *fmt, va_list ap, char *text);
 pflag *flag_consume(const char *fmt);
 // void free_list(contents *cont);
-char *sss();
 #endif
