@@ -4,7 +4,7 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include <limits.h>
-#include "../libft/includes/libft.h"
+#include "libft/includes/libft.h"
 #include <stdbool.h>
 typedef struct {
     bool is_alignleft;

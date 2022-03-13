@@ -57,6 +57,10 @@ char	*ft_insert(char *str, char *str2, size_t n)
 	return str;
 }
 
+char *sss()
+{
+	return "c";
+}
 // char *apply_padding(char *str, pflag *flag)
 // {
 // 	if (flag->padding_n <= ft_strlen(str))
@@ -129,6 +133,8 @@ size_t consume_n(const char *fmt)
 
 	base = 1;
 	n = 0;
+	if (*fmt == '-')
+		return n;
 	while (*fmt)
 	{
 		if (*fmt >= '0' && *fmt <= '9')
@@ -212,8 +218,10 @@ size_t	write_str(char *str)
 
 pflag *flag_priority(pflag *flag)
 {
-	if (!flag)
+	if (flag == NULL)
 		return (NULL);
+	if (flag->is_alignleft && flag->is_padding)
+		flag->is_padding = false;
 	return (flag);
 }
 
