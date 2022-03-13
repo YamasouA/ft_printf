@@ -44,7 +44,7 @@ char	*ft_insert(char *str, char *str2, size_t n)
 	return (str);
 }
 
-char *apply_width(char *str1, char *str2, int insert)
+char	*apply_width(char *str1, char *str2, int insert)
 {
 	char	*str;
 
@@ -71,7 +71,7 @@ char	*apply_convert(char *str, pflag *flag)
 	return (str);
 }
 
-char *apply_flag(char *str, pflag *flag)
+char	*apply_flag(char *str, pflag *flag)
 {
 	if (flag->is_alignleft) // '-'
 		str = apply_width(str, flag_char(str, ' ', flag->field_width), 0);
@@ -93,7 +93,7 @@ char *apply_flag(char *str, pflag *flag)
 	return (str);
 }
 
-size_t consume_n(const char *fmt)
+size_t	consume_n(const char *fmt)
 {
 	int base;
 	size_t n;
@@ -115,7 +115,7 @@ size_t consume_n(const char *fmt)
 	return (n);
 }
 
-pflag *init_flag()
+pflag	*init_flag()
 {
 	pflag	*flag;
 
@@ -134,7 +134,7 @@ pflag *init_flag()
 	return (flag);
 }
 
-pflag *flag_consume(const char *fmt)
+pflag	*flag_consume(const char *fmt)
 {
 	pflag	*flag;
 
@@ -183,7 +183,7 @@ size_t	write_str(char *str)
 	return (ft_strlen(str));
 }
 
-pflag *flag_priority(pflag *flag)
+pflag	*flag_priority(pflag *flag)
 {
 	if (flag == NULL)
 		return (NULL);
@@ -223,7 +223,7 @@ size_t	parse(const char *fmt, va_list ap)
 	return (write_str(str));
 }
 
-size_t extract_text(const char *fmt, size_t len)
+size_t	extract_text(const char *fmt, size_t len)
 {
     char *str;
 
@@ -234,26 +234,22 @@ size_t extract_text(const char *fmt, size_t len)
 	return (write_str(str));
 }
 
-// ここは直さないといない
-int check_len(int total_len, size_t write_len)
+int	check_len(int write_len, size_t total_len)
 {
-	int tmp;
-
-	tmp = total_len;
 	total_len += write_len;
-	if (total_len < tmp)
+	if (total_len > INT_MAX)
 		return (1);
 	return (0);
 }
 
-int ft_printf(const char *fmt, ...)
+int	ft_printf(const char *fmt, ...)
 {
 	va_list	ap;
 	// contents head;
 	// contents *cur;
 	char *p;
 	// char *text;
-	int	total_len;
+	size_t	total_len;
 	int write_len;
 
 	// head->next = NULL;
@@ -271,10 +267,10 @@ int ft_printf(const char *fmt, ...)
 		    write_len = extract_text(fmt, p-fmt);
 		else // *fmt == '%'
 		    write_len = parse(++fmt, ap);
-	    if (write_len < 0 || check_len(write_len, total_len))
+	    if (write_len > INT_MAX || check_len(write_len, total_len))
 			return (-1);
 		total_len += write_len;
 	}
 	va_end(ap);
-	return (total_len);
+	return ((int)total_len);
 }
