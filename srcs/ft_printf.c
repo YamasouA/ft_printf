@@ -141,7 +141,7 @@ pflag	*flag_consume(const char *fmt)
 	flag = init_flag();
 	if (!flag)
 		return (NULL);
-	while (*fmt)
+	while (*fmt != '\0')
 	{
 		if (*fmt == '-')
 		{
@@ -226,12 +226,13 @@ size_t	parse(const char *fmt, va_list ap)
 size_t	extract_text(const char *fmt, size_t len)
 {
     char *str;
+	char *str_tmp;
 
     str = ft_calloc(1, len);
+	str_tmp = str;
     while (len--)
         *str++ = *fmt++;
-	
-	return (write_str(str));
+	return (write_str(str_tmp));
 }
 
 int	check_len(int write_len, size_t total_len)
@@ -245,28 +246,29 @@ int	check_len(int write_len, size_t total_len)
 int	ft_printf(const char *fmt, ...)
 {
 	va_list	ap;
-	// contents head;
-	// contents *cur;
 	char *p;
-	// char *text;
 	size_t	total_len;
 	int write_len;
 
-	// head->next = NULL;
-	// cur = &head;
 	if (fmt == NULL)
 		return (-1);
 	total_len = 0;
 	va_start(ap, fmt);
-	while (*fmt)
+	while (*fmt != '\0')
 	{
 		p = (char *)fmt;
-		while (*p != '%' && *p)
+		while (*p != '%' && *p != '\0')
 		    p++;
 		if (p != fmt)
+		{
 		    write_len = extract_text(fmt, p-fmt);
-		else // *fmt == '%'
+			fmt = p;
+		}
+		if (*p == '%')
+		{
 		    write_len = parse(++fmt, ap);
+			fmt++;
+		}
 	    if (write_len > INT_MAX || check_len(write_len, total_len))
 			return (-1);
 		total_len += write_len;
