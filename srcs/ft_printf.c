@@ -178,9 +178,12 @@ pflag	*flag_consume(const char *fmt)
 
 size_t	write_str(char *str)
 {
+	size_t	len;
+
+	len = ft_strlen(str);
 	ft_putstr_fd(str, 1);
 	free(str);
-	return (ft_strlen(str));
+	return (len);
 }
 
 pflag	*flag_priority(pflag *flag)
@@ -228,10 +231,11 @@ size_t	extract_text(const char *fmt, size_t len)
     char *str;
 	char *str_tmp;
 
-    str = ft_calloc(1, len);
+    str = ft_calloc(1, len+1);
 	str_tmp = str;
     while (len--)
         *str++ = *fmt++;
+	*str = '\0';
 	return (write_str(str_tmp));
 }
 
