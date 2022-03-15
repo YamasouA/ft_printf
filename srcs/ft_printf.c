@@ -202,6 +202,8 @@ pflag	*flag_priority(pflag *flag)
 		return (NULL);
 	if (flag->is_alignleft && flag->is_padding)
 		flag->is_padding = false;
+	if (flag->is_assign && flag->is_alignspace)
+		flag->is_alignspace = false;
 	return (flag);
 }
 
