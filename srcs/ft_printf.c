@@ -143,14 +143,14 @@ pflag	*flag_consume(const char *fmt)
 		return (NULL);
 	while (*fmt != '\0')
 	{
-		if (*fmt == '-')
+		if (*fmt == '-' || *fmt == '0' || *fmt == ' ')
 		{
-			flag->is_alignleft = 1;
-			flag->field_width = consume_n(fmt);
-		}
-		else if (*fmt == '0')
-		{
-			flag->is_padding = 1;
+			if (*fmt == '-')
+				flag->is_alignleft = 1;
+			else if (*fmt == '0')
+				flag->is_padding = 1;
+			else if (*fmt == ' ')
+				flag->is_alignspace = 1;
 			flag->field_width = consume_n(fmt);
 		}
 		else if (*fmt == '.')
@@ -158,19 +158,15 @@ pflag	*flag_consume(const char *fmt)
 			flag->is_precision = 1;
 			flag->precision = consume_n(fmt);
 		}
-		// else if (*fmt == '#')
-		// {
-		// 	flag->is_specifier = 1;
-		// 	flag->convert = *(++fmt);
-		// }
-		// else if (*fmt == ' ')
-		// {
-		// 	flag->is_alignspace = 1;
-		// 	flag->alignspace_n = consume_n(fmt);
-
-		// }
-		// else if (*fmt == '+')
-		// 	flag->is_assign = 1;
+		else if (*fmt == '#')
+		{
+			flag->is_specifier = 1;
+			flag->convert = *(++fmt);
+		}
+		else if (*fmt == '+')
+			flag->is_assign = 1;
+		else
+			break;
 		fmt++;
 	}
 	return (flag);
