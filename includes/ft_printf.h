@@ -48,5 +48,4 @@ char *x_to_string(va_list ap, int type);
 // contents *new_contents(const char *fmt, va_list ap, char *text);
 pflag *flag_consume(const char *fmt);
 // void free_list(contents *cont);
-char *sss();
 #endif

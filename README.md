@@ -2,13 +2,19 @@
 
 ##
 - printfの再実装
-- %csdiupの表示が可能
+- %csdiup (現在改良中のため動かない)
+
+##
+- '0', '-', '.', '#', ' ', '+'のフラグを追加予定
+
+##
+- 今後 '
 
 ## 使い方
 ```bash
 git clone https://github.com/YamasouA/ft_printf.git
 make
-gcc -I includes main.c libftprintf.a
+gcc main.c libftprintf.a
 ./a.out
 ```
 ```c
