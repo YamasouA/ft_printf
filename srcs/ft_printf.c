@@ -104,7 +104,7 @@ size_t	consume_n(const char *fmt)
 		return (n);
 	while (*fmt)
 	{
-		if (*fmt >= '0' && *fmt <= '9')
+		if (ft_isdigit(fmt))
 		{
 			n += *fmt - '0' * base;
 			base *= 10;
@@ -143,28 +143,42 @@ pflag	*flag_consume(const char *fmt)
 		return (NULL);
 	while (*fmt != '\0')
 	{
-		if (*fmt == '-' || *fmt == '0' || *fmt == ' ')
-		{
-			if (*fmt == '-')
-				flag->is_alignleft = 1;
-			else if (*fmt == '0')
-				flag->is_padding = 1;
-			else if (*fmt == ' ')
-				flag->is_alignspace = 1;
-			flag->field_width = consume_n(fmt);
-		}
+		// if (*fmt == '-' || *fmt == '0' || *fmt == ' ')
+		// {
+		// 	if (*fmt == '-')
+		// 		flag->is_alignleft = 1;
+		// 	else if (*fmt == '0')
+		// 		flag->is_padding = 1;
+		// 	else if (*fmt == ' ')
+		// 		flag->is_alignspace = 1;
+		// 	flag->field_width = consume_n(fmt);
+		// }
+		// else if (*fmt == '.')
+		// {
+		// 	flag->is_precision = 1;
+		// 	flag->precision = consume_n(fmt);
+		// }
+		// else if (*fmt == '#')
+		// {
+		// 	flag->is_specifier = 1;
+		// 	flag->convert = *(++fmt);
+		// }
+		// else if (*fmt == '+')
+		// 	flag->is_assign = 1;
+		if (*fmt == '-')
+			flag->is_alignleft = 1;
+		else if (*fmt == '0')
+			flag->is_padding = 1;
+		else if (*fmt == ' ')
+			flag->is_alignspace = 1;
 		else if (*fmt == '.')
-		{
 			flag->is_precision = 1;
-			flag->precision = consume_n(fmt);
-		}
 		else if (*fmt == '#')
-		{
 			flag->is_specifier = 1;
-			flag->convert = *(++fmt);
-		}
-		else if (*fmt == '+')
-			flag->is_assign = 1;
+		else if (ft_isdigit(fmt) && flag->is_precision)
+			flag->precision = consume_n(fmt);
+		else if (ft_isdigit(fmt) && !flag->is_precision)
+			flag->width = consume_n(fmt);
 		else
 			break;
 		fmt++;
