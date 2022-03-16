@@ -225,7 +225,7 @@ size_t	parse(const char *fmt, va_list ap)
 		return (LONG_MAX);
 	if (*fmt == 'c' || *fmt == '%')
 		// str = (char *)fmt;
-		return (write_c((char)fmt));
+		return (write_c((char)va_arg(ap, int)));
 	else if (*fmt == 's')
 		str = s_to_string(ap);
 	else if (*fmt == 'd' || *fmt == 'i')
