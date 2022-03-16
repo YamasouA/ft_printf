@@ -93,25 +93,29 @@ char	*apply_flag(char *str, pflag *flag)
 	return (str);
 }
 
-size_t	consume_n(const char *fmt)
+size_t	consume_n(const char **fmt)
 {
 	int base;
 	size_t n;
+	char	*c;
 
+	c = (char *)*fmt;
 	base = 1;
 	n = 0;
-	if (*fmt == '-')
+	if (*c == '-')
 		return (n);
-	while (*fmt)
+	while (*c != '\0')
 	{
-		if (ft_isdigit(*fmt))
+		if (ft_isdigit(*c))
 		{
-			n += *fmt - '0' * base;
+			n += (*c - '0') * base;
 			base *= 10;
 		}
 		else
 			break;
+		c++;
 	}
+	*fmt = (const char *)&c;
 	return (n);
 }
 
@@ -165,7 +169,11 @@ pflag	*flag_consume(const char *fmt)
 		// }
 		// else if (*fmt == '+')
 		// 	flag->is_assign = 1;
-		if (*fmt == '-')
+		if (ft_isdigit(*fmt) && flag->is_precision)
+			flag->precision = consume_n(&fmt);
+		else if (ft_isdigit(*fmt) && !flag->is_precision)
+			flag->field_width = consume_n(&fmt);
+		else if (*fmt == '-')
 			flag->is_alignleft = 1;
 		else if (*fmt == '0')
 			flag->is_padding = 1;
@@ -175,10 +183,6 @@ pflag	*flag_consume(const char *fmt)
 			flag->is_precision = 1;
 		else if (*fmt == '#')
 			flag->is_specifier = 1;
-		else if (ft_isdigit(*fmt) && flag->is_precision)
-			flag->precision = consume_n(fmt);
-		else if (ft_isdigit(*fmt) && !flag->is_precision)
-			flag->field_width = consume_n(fmt);
 		else
 			break;
 		fmt++;
