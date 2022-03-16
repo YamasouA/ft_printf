@@ -46,6 +46,6 @@ char *p_to_string(va_list ap);
 char *x_to_string(va_list ap, int type);
 // size_t concat_contents();
 // contents *new_contents(const char *fmt, va_list ap, char *text);
-pflag *flag_consume(const char *fmt);
+// pflag *flag_consume(const char *fmt);
 // void free_list(contents *cont);
 #endif

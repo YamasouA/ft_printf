@@ -115,7 +115,7 @@ size_t	consume_n(const char **fmt)
 			break;
 		c++;
 	}
-	*fmt = c;
+	*fmt = --c; // consume flagでfmtを一つ進めるため
 	return (n);
 }
 
@@ -138,14 +138,16 @@ pflag	*init_flag()
 	return (flag);
 }
 
-pflag	*flag_consume(const char *fmt)
+pflag	*flag_consume(const char **fmt)
 {
 	pflag	*flag;
+	const char *fmt_tmp;
 
 	flag = init_flag();
+	fmt_tmp = *fmt;
 	if (!flag)
 		return (NULL);
-	while (*fmt != '\0')
+	while (*fmt_tmp != '\0')
 	{
 		// if (*fmt == '-' || *fmt == '0' || *fmt == ' ')
 		// {
@@ -169,24 +171,25 @@ pflag	*flag_consume(const char *fmt)
 		// }
 		// else if (*fmt == '+')
 		// 	flag->is_assign = 1;
-		if (ft_isdigit(*fmt) && flag->is_precision)
-			flag->precision = consume_n(&fmt);
-		else if (ft_isdigit(*fmt) && !flag->is_precision)
-			flag->field_width = consume_n(&fmt);
-		else if (*fmt == '-')
+		if (ft_isdigit(*fmt_tmp) && flag->is_precision)
+			flag->precision = consume_n(&fmt_tmp);
+		else if (ft_isdigit(*fmt_tmp) && !flag->is_precision)
+			flag->field_width = consume_n(&fmt_tmp);
+		else if (*fmt_tmp == '-')
 			flag->is_alignleft = 1;
-		else if (*fmt == '0')
+		else if (*fmt_tmp == '0')
 			flag->is_padding = 1;
-		else if (*fmt == ' ')
+		else if (*fmt_tmp == ' ')
 			flag->is_alignspace = 1;
-		else if (*fmt == '.')
+		else if (*fmt_tmp == '.')
 			flag->is_precision = 1;
-		else if (*fmt == '#')
+		else if (*fmt_tmp == '#')
 			flag->is_specifier = 1;
 		else
 			break;
-		fmt++;
+		fmt_tmp++;
 	}
+	*fmt = fmt_tmp;
 	return (flag);
 }
 
@@ -223,7 +226,7 @@ size_t	parse(const char *fmt, va_list ap)
 	pflag *flag;
 	char	*str;
 
-    flag = flag_consume(fmt);
+    flag = flag_consume(&fmt);
 	flag = flag_priority(flag);
 	if (!flag)
 		return (LONG_MAX);
