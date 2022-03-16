@@ -18,8 +18,10 @@ $(NAME) : $(OBJS) $(LIBFT)
 %.o:%.c
 	$(CC) $(CFLAGS) -o $@ -c $< 
 
-$(LIBFT):
+$(LIBFT): empty
 	make -C libft
+
+empty:
 
 clean:
 	rm -f $(OBJS)

@@ -37,13 +37,13 @@ char *p_to_string(va_list ap)
 
 char *x_to_string(va_list ap, int type)
 {
-    char base[2][16] = {"0123456789abcdef", "0123456789ABCDEF"};
+    char base[2][17] = {"0123456789abcdef", "0123456789ABCDEF"};
     char *b;
-    long long l;
+    unsigned int u;
 
     b = base[type];
-    l = va_arg(ap, long long);
+    u = va_arg(ap, unsigned int);
 
-    return ft_ltoa(l);
+    return ft_utoxtoa(u, b);
 
 }

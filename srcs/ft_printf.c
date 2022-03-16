@@ -257,11 +257,10 @@ size_t	extract_text(const char *fmt, size_t len)
     char *str;
 	char *str_tmp;
 
-    str = ft_calloc(1, len+1);
+    str = ft_calloc(len+1, sizeof(char));
 	str_tmp = str;
     while (len--)
         *str++ = *fmt++;
-	*str = '\0';
 	return (write_str(str_tmp));
 }
 
