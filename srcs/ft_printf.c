@@ -115,7 +115,7 @@ size_t	consume_n(const char **fmt)
 			break;
 		c++;
 	}
-	*fmt = (const char *)&c;
+	*fmt = c;
 	return (n);
 }
 
