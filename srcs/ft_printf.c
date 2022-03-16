@@ -104,7 +104,7 @@ size_t	consume_n(const char *fmt)
 		return (n);
 	while (*fmt)
 	{
-		if (ft_isdigit(fmt))
+		if (ft_isdigit(*fmt))
 		{
 			n += *fmt - '0' * base;
 			base *= 10;
@@ -175,10 +175,10 @@ pflag	*flag_consume(const char *fmt)
 			flag->is_precision = 1;
 		else if (*fmt == '#')
 			flag->is_specifier = 1;
-		else if (ft_isdigit(fmt) && flag->is_precision)
+		else if (ft_isdigit(*fmt) && flag->is_precision)
 			flag->precision = consume_n(fmt);
-		else if (ft_isdigit(fmt) && !flag->is_precision)
-			flag->width = consume_n(fmt);
+		else if (ft_isdigit(*fmt) && !flag->is_precision)
+			flag->field_width = consume_n(fmt);
 		else
 			break;
 		fmt++;
@@ -194,6 +194,12 @@ size_t	write_str(char *str)
 	ft_putstr_fd(str, 1);
 	free(str);
 	return (len);
+}
+
+size_t write_c(char c)
+{
+	ft_putchar_fd(c, 1);
+	return (1);
 }
 
 pflag	*flag_priority(pflag *flag)
@@ -218,7 +224,8 @@ size_t	parse(const char *fmt, va_list ap)
 	if (!flag)
 		return (LONG_MAX);
 	if (*fmt == 'c' || *fmt == '%')
-		str = (char *)fmt;
+		// str = (char *)fmt;
+		return (write_c((char)fmt));
 	else if (*fmt == 's')
 		str = s_to_string(ap);
 	else if (*fmt == 'd' || *fmt == 'i')
@@ -231,8 +238,8 @@ size_t	parse(const char *fmt, va_list ap)
 		str = x_to_string(ap, 1);
     else if (*fmt == 'p')
         str = p_to_string(ap);
-	else // 適当
-		str = (char *)fmt;
+	else // エラーを返す
+		return (LONG_MAX);
 	str = apply_flag(str, flag);
 	fmt++;
 	return (write_str(str));
