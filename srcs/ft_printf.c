@@ -243,8 +243,15 @@ size_t	parse(const char **fmt, va_list *ap)
 	if (!flag)
 		return (LONG_MAX);
 	if (*fmt_tmp == 'c')
-		// str = (char *)fmt;
+	{
+		*fmt = ++fmt_tmp;
 		return (write_c(va_arg(*ap, int)));
+	}
+	else if (*fmt_tmp == '%')
+	{
+		*fmt = ++fmt_tmp;
+		return (write_c('%'));
+	}
 	else if (*fmt_tmp == 's')
 		str = s_to_string(ap);
 	else if (*fmt_tmp == 'd' || *fmt_tmp == 'i')
@@ -257,8 +264,6 @@ size_t	parse(const char **fmt, va_list *ap)
 		str = x_to_string(ap, 1);
     else if (*fmt_tmp == 'p')
         str = p_to_string(ap);
-	else if (*fmt_tmp == '%')
-		return (write_c('%'));
 	else // エラーを返す
 		return (LONG_MAX);
 	str = apply_flag(str, flag);
