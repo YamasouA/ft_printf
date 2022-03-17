@@ -1,18 +1,19 @@
 #include "../includes/ft_printf.h"
-
+#include <stdio.h>
 char	*flag_char(char *str1, char c, size_t n)
 {
 	char *str;
-	size_t	idx;
 	size_t	len;
 
-	len = n - ft_strlen(str1);
-	if (len <= 0)
+	// printf("%zu: %zu\n", n, ft_strlen(str1));
+	if (n <= ft_strlen(str1))
 		return (NULL);
-	str = (char *)ft_calloc(len, 1);
-	idx = n;
-	while (n--)
-		str[idx-n] = c;
+	len = n - ft_strlen(str1);
+	// printf("%zu\n", len);
+	str = (char *)ft_calloc(len + 1, sizeof(char));
+	while (len--)
+		str[len] = c;
+	// printf("flag_char: %s\n", str);
 	return (str);
 }
 
@@ -20,43 +21,50 @@ char	*ft_insert(char *str, char *str2, size_t n)
 {
 	size_t	str_len;
 	size_t	str2_len;
-	size_t	cnt;
+	size_t	i;
 	char *str_join;
 
 	str_len = ft_strlen(str);
 	str2_len = ft_strlen(str2);
-	str_join = (char *)ft_calloc(str_len + str2_len, 1);
+	str_join = (char *)ft_calloc(str_len + str2_len + 1, sizeof(char));
 	if (!str_join)
 		return (NULL);
-	cnt = 0;
-	while (str_len--)
+	i = 0;
+	while (i <= str_len)
 	{
-		if (cnt == n)
+		if (i == n)
 		{
-			*str_join++ = *str2++;
+			str_join[i++] = *str2++;
 			str2_len--;
 		}
-		*str_join++ = *str++;
-		cnt++;
+		str_join[i++] = *str++;
 	}
-	while (str2_len--)
-		*str_join++ = *str2++;
-	return (str);
+	i = 1;
+	while (i <= str2_len)
+		str_join[str_len + i++] = *str2++;
+	// printf("str: %s\n", str_join);
+	return (str_join);
 }
 
 char	*apply_width(char *str1, char *str2, int insert)
 {
 	char	*str;
+	int		flag;
 
 	if (!str1 || !str2)
 		return (NULL);
-	str = (char *)ft_calloc(ft_strlen(str1) + ft_strlen(str2), 1);
-	if (insert==1)
-		str = ft_insert(str1, str2, 1);
+	// printf("str1: %s\n", str1);
+	// printf("str2: %s\n", str2);
+	flag = *str2 == '-';
+	// str = (char *)ft_calloc(ft_strlen(str1) + ft_strlen(str2) + 1, sizeof(char));
+	insert--;
+	if (flag)
+		str = ft_insert(str1, str2, 0);
 	else
 		str = ft_strjoin(str1, str2);
-	free(str1);
-	free(str2);
+	// free(str1);
+	// free(str2);
+	// printf("s is: %s\n", str);
 	return (str);
 }
 
@@ -73,12 +81,13 @@ char	*apply_convert(char *str, pflag *flag)
 
 char	*apply_flag(char *str, pflag *flag)
 {
+	// printf("%zu\n", flag->field_width);
 	if (flag->is_alignleft) // '-'
 		str = apply_width(str, flag_char(str, ' ', flag->field_width), 0);
 	if (flag->is_padding) // '0'
 		// str = apply_padding(str, flag); // strの先頭が-かどうかで処理が変わる
 		// 文字列の先頭が'-'の場合は'-'をfield_widthにカウントする
-		str = apply_width(str, flag_char(str, '0', flag->field_width), 1);
+		str = apply_width(flag_char(str, '0', flag->field_width), str, 1);
 	if (flag->is_precision) // '.'
 		// 文字列の先頭が'-'の場合は'-'をfield_widthにカウントしない
 		str = apply_width(str, flag_char(str, '0', flag->field_width - 1), 1);
@@ -108,13 +117,14 @@ size_t	consume_n(const char **fmt)
 	{
 		if (ft_isdigit(*c))
 		{
-			n += (*c - '0') * base;
+			n = (*c - '0') + n * base;
 			base *= 10;
 		}
 		else
 			break;
 		c++;
 	}
+	// printf("n::::%zu\n", n);
 	*fmt = --c; // consume flagでfmtを一つ進めるため
 	return (n);
 }
@@ -173,7 +183,7 @@ pflag	*flag_consume(const char **fmt)
 		// 	flag->is_assign = 1;
 		if (ft_isdigit(*fmt_tmp) && flag->is_precision)
 			flag->precision = consume_n(&fmt_tmp);
-		else if (ft_isdigit(*fmt_tmp) && !flag->is_precision)
+		else if (ft_isdigit(*fmt_tmp) && (flag->is_padding || flag->is_alignleft))
 			flag->field_width = consume_n(&fmt_tmp);
 		else if (*fmt_tmp == '-')
 			flag->is_alignleft = 1;
@@ -188,6 +198,7 @@ pflag	*flag_consume(const char **fmt)
 		else
 			break;
 		fmt_tmp++;
+		// printf("n: %zu\n", flag->field_width);
 	}
 	*fmt = fmt_tmp;
 	return (flag);
@@ -220,35 +231,40 @@ pflag	*flag_priority(pflag *flag)
 	return (flag);
 }
 
-size_t	parse(const char *fmt, va_list ap)
+size_t	parse(const char **fmt, va_list *ap)
 {
-	// contents cont;
 	pflag *flag;
 	char	*str;
+	const char	*fmt_tmp;
 
-    flag = flag_consume(&fmt);
+	fmt_tmp = *fmt;
+    flag = flag_consume(&fmt_tmp);
 	flag = flag_priority(flag);
 	if (!flag)
 		return (LONG_MAX);
-	if (*fmt == 'c' || *fmt == '%')
+	if (*fmt_tmp == 'c')
 		// str = (char *)fmt;
-		return (write_c((char)va_arg(ap, int)));
-	else if (*fmt == 's')
+		return (write_c(va_arg(*ap, int)));
+	else if (*fmt_tmp == 's')
 		str = s_to_string(ap);
-	else if (*fmt == 'd' || *fmt == 'i')
+	else if (*fmt_tmp == 'd' || *fmt_tmp == 'i')
 	 	str = d_to_string(ap);
-	else if (*fmt == 'u')
+	else if (*fmt_tmp == 'u')
 	    str = u_to_string(ap);
-	else if (*fmt == 'x')
+	else if (*fmt_tmp == 'x')
 		str = x_to_string(ap, 0);
-	else if (*fmt == 'X')
+	else if (*fmt_tmp == 'X')
 		str = x_to_string(ap, 1);
-    else if (*fmt == 'p')
+    else if (*fmt_tmp == 'p')
         str = p_to_string(ap);
+	else if (*fmt_tmp == '%')
+		return (write_c('%'));
 	else // エラーを返す
 		return (LONG_MAX);
 	str = apply_flag(str, flag);
-	fmt++;
+	// printf("parse: %s\n", str);
+	// flag_clear(flag);
+	*fmt = ++fmt_tmp;
 	return (write_str(str));
 }
 
@@ -293,10 +309,10 @@ int	ft_printf(const char *fmt, ...)
 		    write_len = extract_text(fmt, p-fmt);
 			fmt = p;
 		}
-		if (*p == '%')
+		else if (*p == '%')
 		{
-		    write_len = parse(++fmt, ap);
-			fmt++;
+			++fmt;
+		    write_len = parse(&fmt, &ap);
 		}
 	    if (write_len > INT_MAX || check_len(write_len, total_len))
 			return (-1);
