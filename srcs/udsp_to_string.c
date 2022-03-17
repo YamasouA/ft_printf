@@ -29,10 +29,12 @@ char *s_to_string(va_list ap)
 char *p_to_string(va_list ap)
 {
     unsigned long ul;
+    char *str;
 
     ul = (unsigned long)va_arg(ap, void *);
-    // return ft_ultoa(ul, "0123456789abcdef");
-    return ft_ultoa(ul);
+    str = ft_ultoxtoa(ul, "0123456789abcdef");
+    str = ft_strjoin("0x", str);
+    return str;
 }
 
 char *x_to_string(va_list ap, int type)
@@ -44,6 +46,6 @@ char *x_to_string(va_list ap, int type)
     b = base[type];
     u = va_arg(ap, unsigned int);
 
-    return ft_utoxtoa(u, b);
+    return ft_ultoxtoa(u, b);
 
 }
