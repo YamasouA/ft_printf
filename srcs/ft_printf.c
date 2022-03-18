@@ -24,6 +24,8 @@ char	*ft_insert(char *str, char *str2, size_t n)
 	size_t	i;
 	char *str_join;
 
+	if (!str || !str2)
+		return (NULL);
 	str_len = ft_strlen(str);
 	str2_len = ft_strlen(str2);
 	str_join = (char *)ft_calloc(str_len + str2_len + 1, sizeof(char));
@@ -57,7 +59,7 @@ char	*apply_width(char *str1, char *str2, int insert)
 	// printf("str2: %s\n", str2);
 	flag = *str2 == '-';
 	// str = (char *)ft_calloc(ft_strlen(str1) + ft_strlen(str2) + 1, sizeof(char));
-	insert--;
+	insert--; // ここはなおせ
 	if (flag)
 		str = ft_insert(str1, str2, 0);
 	else
@@ -81,16 +83,19 @@ char	*apply_convert(char *str, pflag *flag)
 
 char	*apply_flag(char *str, pflag *flag)
 {
+	char *str2;
+
 	// printf("%zu\n", flag->field_width);
+	str2 = NULL;
 	if (flag->is_alignleft) // '-'
-		str = apply_width(str, flag_char(str, ' ', flag->field_width), 0);
+		str2 = apply_width(str, flag_char(str, ' ', flag->field_width), 0);
 	if (flag->is_padding) // '0'
 		// str = apply_padding(str, flag); // strの先頭が-かどうかで処理が変わる
 		// 文字列の先頭が'-'の場合は'-'をfield_widthにカウントする
-		str = apply_width(flag_char(str, '0', flag->field_width), str, 1);
+		str2 = apply_width(flag_char(str, '0', flag->field_width), str, 1);
 	if (flag->is_precision) // '.'
 		// 文字列の先頭が'-'の場合は'-'をfield_widthにカウントしない
-		str = apply_width(str, flag_char(str, '0', flag->field_width - 1), 1);
+		str2 = apply_width(str, flag_char(str, '0', flag->field_width - 1), 1);
 	// if (flag->is_specifier) // '#'
 	// 	str = apply_convert(str, flag);;
 	// if (flag->is_alignspace) // ' '
@@ -99,7 +104,10 @@ char	*apply_flag(char *str, pflag *flag)
 	// if (flag->is_assign) // +
 	// 	if (*str != '-')
 	// 		str = ft_strjoin("+", str);
-	return (str);
+
+	if (!str2)
+		return (str);
+	return (str2);
 }
 
 size_t	consume_n(const char **fmt)
@@ -243,15 +251,9 @@ size_t	parse(const char **fmt, va_list *ap)
 	if (!flag)
 		return (LONG_MAX);
 	if (*fmt_tmp == 'c')
-	{
-		*fmt = ++fmt_tmp;
-		return (write_c(va_arg(*ap, int)));
-	}
+		str = c_to_string(va_arg(*ap, int));
 	else if (*fmt_tmp == '%')
-	{
-		*fmt = ++fmt_tmp;
-		return (write_c('%'));
-	}
+		str = c_to_string('%');
 	else if (*fmt_tmp == 's')
 		str = s_to_string(ap);
 	else if (*fmt_tmp == 'd' || *fmt_tmp == 'i')

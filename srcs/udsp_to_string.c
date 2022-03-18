@@ -1,5 +1,14 @@
 #include "../includes/ft_printf.h"
 
+char    *c_to_string(char c)
+{
+    char *s;
+
+    s = (char *)ft_calloc(2, sizeof(char));
+    s[0] = c;
+    return (s);
+}
+
 char *u_to_string(va_list *ap)
 {
     unsigned int    n;
