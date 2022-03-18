@@ -5,6 +5,8 @@ char    *c_to_string(char c)
     char *s;
 
     s = (char *)ft_calloc(2, sizeof(char));
+    if (!s || !c)
+        return (NULL);
     s[0] = c;
     return (s);
 }
