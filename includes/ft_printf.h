@@ -39,7 +39,7 @@ char *apply_precision(char *str, pflag *flag);
 // char *apply_specifier(contents *list);
 // char *apply_alignspace(contents *list);
 // char *apply_assign(contents *list);
-char    *c_to_string(char c);
+char    *c_to_string(char c, int *c_null);
 char *u_to_string(va_list *ap);
 char *d_to_string(va_list *ap);
 char *s_to_string(va_list *ap);

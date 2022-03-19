@@ -71,8 +71,8 @@ char	*apply_width(char *str1, char *str2, int insert)
 		str = ft_insert(str1, str2, 0);
 	else
 		str = ft_strjoin(str1, str2);
-	// free(str1);
-	// free(str2);
+	free(str1);
+	free(str2);
 	// printf("s is: %s\n", str);
 	return (str);
 }
@@ -119,7 +119,6 @@ char	*apply_flag(char *str, pflag *flag)
 	// if (flag->is_assign) // +
 	// 	if (*str != '-')
 	// 		str = ft_strjoin("+", str);
-	
 
 	if (!str)
 		return (str2);
@@ -266,22 +265,18 @@ pflag	*flag_consume(const char **fmt)
 	return (flag);
 }
 
-size_t	write_str(char *str)
+size_t	write_str(char *str, int c_null)
 {
 	size_t	len;
 
 	if (!str)
 		return (1);
 	len = ft_strlen(str);
+	if (c_null)
+		len = 1;
 	ft_putstr_fd(str, 1);
 	free(str);
 	return (len);
-}
-
-size_t write_c(char c)
-{
-	ft_putchar_fd(c, 1);
-	return (1);
 }
 
 size_t	parse(const char **fmt, va_list *ap)
@@ -289,16 +284,18 @@ size_t	parse(const char **fmt, va_list *ap)
 	pflag *flag;
 	char	*str;
 	const char	*fmt_tmp;
+	int	c_null;
 
 	fmt_tmp = *fmt;
+	c_null = 0;
     flag = flag_consume(&fmt_tmp);
 	// flag = flag_priority(flag);
 	if (!flag)
 		return (LONG_MAX);
 	if (*fmt_tmp == 'c')
-		str = c_to_string(va_arg(*ap, int));
+		str = c_to_string(va_arg(*ap, int), &c_null);
 	else if (*fmt_tmp == '%')
-		str = c_to_string('%');
+		str = c_to_string('%', &c_null);
 	else if (*fmt_tmp == 's')
 		str = s_to_string(ap);
 	else if (*fmt_tmp == 'd' || *fmt_tmp == 'i')
@@ -316,8 +313,9 @@ size_t	parse(const char **fmt, va_list *ap)
 	str = apply_flag(str, flag);
 	// printf("parse: %s\n", str);
 	// flag_clear(flag);
+	free(flag);
 	*fmt = ++fmt_tmp;
-	return (write_str(str));
+	return (write_str(str, c_null));
 }
 
 size_t	extract_text(const char *fmt, size_t len)
@@ -329,7 +327,7 @@ size_t	extract_text(const char *fmt, size_t len)
 	str_tmp = str;
     while (len--)
         *str++ = *fmt++;
-	return (write_str(str_tmp));
+	return (write_str(str_tmp, 0));
 }
 
 int	check_len(int write_len, size_t total_len)

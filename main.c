@@ -302,6 +302,24 @@ int main()
     printf("%d\n", x);
     printf("%d\n", y);
     printf("\n");
+
+    x = printf(" %c %c %c \n", '0', 0, '1');
+    y = ft_printf(" %c %c %c \n", '0', 0, '1');
+    printf("%d\n", x);
+    printf("%d\n", y);
+    printf("\n");
+
+    x = printf(" %c %c %c end\n", '2', '1', 0);
+    y = ft_printf(" %c %c %c end\n", '2', '1', 0);
+    printf("%d\n", x);
+    printf("%d\n", y);
+    printf("\n");
+
+    x = printf(" %c %c %c \n", 0, '1', '2');
+    y = ft_printf(" %c %c %c \n", 0, '1', '2');
+    printf("%d\n", x);
+    printf("%d\n", y);
+    printf("\n");
     
 
     printf("=============== multiple format ===============\n");

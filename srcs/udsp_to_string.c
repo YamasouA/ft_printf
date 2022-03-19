@@ -1,13 +1,15 @@
 #include "../includes/ft_printf.h"
 
-char    *c_to_string(char c)
+char    *c_to_string(char c, int *c_null)
 {
     char *s;
 
     s = (char *)ft_calloc(2, sizeof(char));
-    if (!s || !c)
+    if (!s)
         return (NULL);
     s[0] = c;
+    if (c == 0)
+        *c_null = 1;
     return (s);
 }
 
@@ -16,7 +18,7 @@ char *u_to_string(va_list *ap)
     unsigned int    n;
 
     n = va_arg(*ap, unsigned int);
-    return ft_utoa(n);
+    return (ft_utoa(n));
 }
 
 char *d_to_string(va_list *ap)
@@ -24,7 +26,7 @@ char *d_to_string(va_list *ap)
     int n;
     
     n = va_arg(*ap, int);
-    return ft_itoa(n);
+    return (ft_itoa(n));
 }
 
 char *s_to_string(va_list *ap)
@@ -34,18 +36,20 @@ char *s_to_string(va_list *ap)
     s = va_arg(*ap, char *);
     if (!s)
         s = "(null)";
-    return ft_strdup(s);
+    return (ft_strdup(s));
 }
 
 char *p_to_string(va_list *ap)
 {
     unsigned long ul;
-    char *str;
+    char    *str;
+    char    *ret;
 
     ul = (unsigned long)va_arg(*ap, void *);
     str = ft_ultoxtoa(ul, "0123456789abcdef");
-    str = ft_strjoin("0x", str);
-    return str;
+    ret = ft_strjoin("0x", str);
+    free(str);
+    return (ret);
 }
 
 char *x_to_string(va_list *ap, int type)
@@ -57,6 +61,6 @@ char *x_to_string(va_list *ap, int type)
     b = base[type];
     u = va_arg(*ap, unsigned int);
 
-    return ft_ultoxtoa(u, b);
+    return (ft_ultoxtoa(u, b));
 
 }
