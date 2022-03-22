@@ -6,3 +6,4 @@ printfTester
 en.subject-4.pdf
 *.o
 *.a
+.test

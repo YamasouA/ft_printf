@@ -6,6 +6,7 @@
 #include <limits.h>
 #include "../libft/includes/libft.h"
 #include <stdbool.h>
+#include <stdio.h>
 typedef struct {
     bool is_alignleft;
     bool is_padding;
@@ -35,6 +36,8 @@ int put_hex(va_list ap, int size);
 // int put_p(va_list ap);
 // void apply_alignleft(contents *list);
 // char *apply_padding(char *str, pflag *flag);
+pflag	*consume(const char **fmt);
+char	*apply_flag(char *str, pflag *flag);
 char *apply_precision(char *str, pflag *flag);
 // char *apply_specifier(contents *list);
 // char *apply_alignspace(contents *list);
