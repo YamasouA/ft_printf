@@ -102,50 +102,50 @@ int	flag_consume(char **fmt, pflag *flag)
 	char *fmt_tmp;
 
 	fmt_tmp = *fmt;
-	if (!ft_strchr("0-.", *fmt_tmp))
+	while (*fmt_tmp != '\0' && ft_strchr("0-#+ ", *fmt_tmp))
 	{
-		flag->is_alignspace = 1;
-		fmt_tmp++;
+		if (flag_priority(flag, &fmt_tmp))
+		{
+			if (*fmt_tmp == '-')
+				flag->is_alignleft = 1;
+			else if (*fmt_tmp == '0')
+				flag->is_padding = 1;
+			else if (*fmt_tmp == ' ')
+				flag->is_alignspace = 1;
+			else if (*fmt_tmp == '.')
+				flag->is_precision = 1;
+			else if (*fmt_tmp == '#')
+				flag->is_specifier = 1;
+			else if (*fmt_tmp == '+')
+				flag->is_specifier = 1;
+			fmt_tmp++;
+		}
 	}
-	else
-	{
-		// while (*fmt_tmp != '\0')
-		// {
-			if (flag_priority(flag, &fmt_tmp))
-			{
-				// if (ft_isdigit(*fmt_tmp) && fmt_tmp[-1] == '.')
-					// flag->precision = consume_n(&fmt_tmp);
-				// else if (ft_isdigit(*fmt_tmp) && (fmt_tmp[-1] == '0' || fmt_tmp[-1] == '-'))
-					// flag->field_width = consume_n(&fmt_tmp);
-				// else if (*fmt_tmp == '-')
-				if (*fmt_tmp == '-')
-					flag->is_alignleft = 1;
-				else if (*fmt_tmp == '0')
-					flag->is_padding = 1;
-				else if (*fmt_tmp == ' ')
-					flag->is_alignspace = 1;
-				else if (*fmt_tmp == '.')
-					flag->is_precision = 1;
-				else if (*fmt_tmp == '#')
-					flag->is_specifier = 1;
-				else if (*fmt_tmp == '+')
-					flag->is_specifier = 1;
-				// else
-				// 	break;
-				fmt_tmp++;
-			}
-		// }
-		*fmt = fmt_tmp;
-	}
+	*fmt = fmt_tmp;
 	return (1);
 }
 
 // void	width_consume(const char **fmt, pflag *flag)
-void	width_consume()
+void	width_consume(char **fmt, pflag *flag, va_list *ap)
 {
+	size_t	width;
 
-	// flag->field_width = consume_n()
-	return ;
+	if (**fmt == '*')
+	{
+		width = va_arg(*ap, int);
+		if (width < 0)
+		{
+
+		}
+		flag->width = width;
+		(*fmt)++;
+	}
+	else if (fmt_isdigit(**fmt))
+	{
+		// width = ft_atoi(*fmt);
+		flag->width = ft_atoi(*fmt);
+		(*fmt) += number_of_digits(flag->width);
+	}
 }
 
 void	precision_consume()
@@ -167,13 +167,13 @@ pflag   *consume(const char **fmt)
 	fmt_tmp = (char *)*fmt;
 	// printf("%c\n", *fmt_tmp);
 	// printf("%s\n", ft_strchr("cspdiuxX%", 'k'));
-    while (*fmt_tmp != '\0' && !ft_strchr("cspdiuxX%", *fmt_tmp))
+    while (*fmt_tmp != '\0' && ft_strchr("0-#+ ", *fmt_tmp))
 	{
-		ret = flag_consume(&fmt_tmp, flag);
-		if (ret)
-			flag->field_width = consume_n(&fmt_tmp);
+		flag_consume(&fmt_tmp, flag);
+		width_consume(&fmt_tmp, flag);
+		precision_consume(&fmt_tmp, flag);
 		// flag = precision_consume();
-		fmt_tmp++;
+		// fmt_tmp++;
 	}
 	*fmt = fmt_tmp;
 	return (flag);
