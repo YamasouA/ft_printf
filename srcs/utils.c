@@ -5,6 +5,8 @@ int number_of_digits(int n)
     int cnt;
 
     cnt = 0;
+    if (n == 0)
+        return (1);
     while (n > 0)
     {
         cnt++;

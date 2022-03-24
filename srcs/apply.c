@@ -84,19 +84,24 @@ char	*apply_flag(char *str, pflag *flag)
 	char *str2;
 
 	str2 = str;
-	if (flag->is_precision) // '.'
-	{	// 文字列の先頭が'-'の場合は'-'をfield_widthにカウントしない
-		str = apply_width(flag_char(str, '0', flag->precision, 1), str, 1);
-	}
-	if (flag->is_alignleft) // '-'
+	if (flag->fl_type == FLAG_MINUS) // '-'
 	{
 		str = apply_width(str, flag_char(str, ' ', flag->field_width, 0), 0);
 	}	
-	if (flag->is_padding) // '0'
+	else if (flag->fl_type == FLAG_ZERO) // '0'
 	{	// str = apply_padding(str, flag); // strの先頭が-かどうかで処理が変わる
 		// 文字列の先頭が'-'の場合は'-'をfield_widthにカウントする
 		str = apply_width(flag_char(str, '0', flag->field_width, 0), str, 1);
 	}
+	else if (flag->field_width)
+	{
+		str = apply_width(flag_char(str, ' ', flag->field_width, 0), str, 0);
+	}
+	if (flag->is_precision) // '.'
+	{	// 文字列の先頭が'-'の場合は'-'をfield_widthにカウントしない
+		str = apply_width(flag_char(str, '0', flag->precision, 1), str, 1);
+	}
+	// if (flag->is_precision)
 	// if (flag->is_specifier) // '#'
 	// 	str = apply_convert(str, flag);;
 	// if (flag->is_alignspace) // ' '
@@ -109,3 +114,69 @@ char	*apply_flag(char *str, pflag *flag)
 		return (str2);
 	return (str);
 }
+
+
+void	write_flag(char c, size_t width)
+{
+	while (width--)
+		write(1, c, 1);
+}
+
+// size_t	write_c(char c, pflag *flag)
+// {
+// 	size_t	len;
+
+// 	len = 0;
+// 	if (flag->fl_type == FLAG_ZERO)
+// 		write_str(flag_char(), )
+// }
+
+size_t	write_s(char *str, pflag *flag)
+{
+	size_t	str_len;
+	size_t	width_len;
+
+	str_len = ft_strlen(str);
+	width_len = 0;
+	if (flag->is_precision && str_len > flag->precision)
+		str_len = flag->precision;
+	if (flag->field_width > str_len)
+		width_len = flag->field_width - str_len;
+	if (flag->fl_type == FLAG_ZERO)
+		write_flag('0', width_len);
+	// else if (flag->fl_type == FLAG_)
+	write(1, str, str_len);
+	if ((flag->fl_type == FLAG_MINUS))
+		write_flag(' ', width_len);
+	return (width_len);
+}
+
+// size_t	write_per()
+// {
+
+// }
+
+// size_t	write_di()
+// {
+
+// }
+
+// size_t	write_u()
+// {
+
+// }
+
+// size_t	write_sx()
+// {
+
+// }
+
+// size_t	write_lx()
+// {
+
+// }
+
+// size_t	write_p()
+// {
+
+// }

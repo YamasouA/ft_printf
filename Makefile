@@ -6,7 +6,8 @@ SRCS_DIR = srcs/
 SRCS_FILES = ft_printf.c\
 		udsp_to_string.c\
 		consume.c\
-		apply.c
+		apply.c\
+		utils.c\
 
 SRCS := $(addprefix $(SRCS_DIR), $(SRCS_FILES))
 OBJS := $(SRCS:%.c=%.o)

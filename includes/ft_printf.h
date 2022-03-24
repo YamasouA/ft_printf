@@ -7,13 +7,25 @@
 #include "../libft/includes/libft.h"
 #include <stdbool.h>
 #include <stdio.h>
+
+typedef enum {
+    FLAG_NONE,
+    FLAG_ZERO,
+    FLAG_DOT,
+    FLAG_MINUS,
+    FLAG_SHARP,
+    FLAG_SPACE,
+    FLAG_PLUS,
+} fl;
 typedef struct {
-    bool is_alignleft;
-    bool is_padding;
+    // bool is_alignleft;
+    // bool is_padding;
+    // bool is_precision;
+    // bool is_specifier;
+    // bool is_alignspace;
+    // bool is_assign;
+    fl  fl_type;
     bool is_precision;
-    bool is_specifier;
-    bool is_alignspace;
-    bool is_assign;
     char *convert;
     size_t field_width;
     size_t precision;
@@ -27,6 +39,7 @@ typedef struct {
 //     contents *next;
 //     pflag *flag;
 // };
+int number_of_digits(int n);
 int ft_printf(const char *fmt, ...);
 int	put_chr(va_list ap);
 int	put_str(va_list ap);
@@ -36,7 +49,7 @@ int put_hex(va_list ap, int size);
 // int put_p(va_list ap);
 // void apply_alignleft(contents *list);
 // char *apply_padding(char *str, pflag *flag);
-pflag	*consume(const char **fmt);
+pflag	*consume(const char **fmt, va_list *ap);
 char	*apply_flag(char *str, pflag *flag);
 char *apply_precision(char *str, pflag *flag);
 // char *apply_specifier(contents *list);

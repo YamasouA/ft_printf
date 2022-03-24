@@ -492,14 +492,14 @@ int main()
     printf("%d\n", j);
     printf("\n");
 
-    i = printf("%.10-30dend\n", INT_MIN);
-    j = ft_printf("%.10-30dend\n", INT_MIN);
+    i = printf("%-30.10dend\n", INT_MIN);
+    j = ft_printf("%-30.10dend\n", INT_MIN);
     printf("%d\n", i);
     printf("%d\n", j);
     printf("\n");
 
-    i = printf("%.0-0dend\n", INT_MIN);
-    j = ft_printf("%.0-0dend\n", INT_MIN);
+    i = printf("%-.0dend\n", INT_MIN);
+    j = ft_printf("%-.0dend\n", INT_MIN);
     printf("%d\n", i);
     printf("%d\n", j);
     printf("\n");
@@ -541,18 +541,30 @@ int main()
     printf("%d\n", j);
     printf("\n");
 
-    printf("=============== clash case  ===============\n");
-    char *s = (char *)ft_calloc(INT_MAX, sizeof(char));
-    for (int i = 0; i < INT_MAX; i++)
-        s[i] = "A";
-    i = printf("%s\n", s);
-    // j = ft_printf("%s\n", s);
-    // printf("%d\n", i);
-    // printf("%d\n", j);
+    i = printf("%10.5s\n", "abcde");
+    j = ft_printf("%10.5s\n", "abcde");
+    printf("%d\n", i);
+    printf("%d\n", j);
     printf("\n");
+
+    // printf("=============== clash case  ===============\n");
+    // char *s = (char *)ft_calloc(INT_MAX, sizeof(char));
+    // for (int i = 0; i < INT_MAX; i++)
+    //     s[i] = "A";
+    // i = printf("%s\n", s);
+    // // j = ft_printf("%s\n", s);
+    // // printf("%d\n", i);
+    // // printf("%d\n", j);
+    // printf("\n");
 
     // i = printf("%\n", 1234);
     // j = ft_printf("%\n", 1234);
     // printf("%d\n", i);
     // printf("%d\n", j);
+    printf("================ check ==============\n");
+    i = printf("%.1s\n", "");
+    j = ft_printf("%.1s\n", "");
+    printf("%d\n", i);
+    printf("%d\n", j);
+    printf("\n");
 }

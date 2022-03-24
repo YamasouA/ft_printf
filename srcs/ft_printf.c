@@ -16,95 +16,75 @@ size_t	write_str(char *str, int c_null)
 
 size_t	parse(const char **fmt, va_list *ap)
 {
-	pflag *flag;
+	pflag	*flag;
 	char	*str;
-	const char	*fmt_tmp;
-	int	c_null;
+	int		c_null;
 
-	fmt_tmp = *fmt;
 	c_null = 0;
-    flag = consume(&fmt_tmp);
+    flag = consume(fmt, ap);
+	// printf("fmt: %s\n", *fmt);
 	// flag = flag_priority(flag);
 	if (!flag)
 		return (LONG_MAX);
-	if (*fmt_tmp == 'c')
+	if (**fmt == 'c')
 		str = c_to_string(va_arg(*ap, int), &c_null);
-	else if (*fmt_tmp == '%')
+	else if (**fmt == '%')
 		str = c_to_string('%', &c_null);
-	else if (*fmt_tmp == 's')
+	else if (**fmt == 's')
 		str = s_to_string(ap);
-	else if (*fmt_tmp == 'd' || *fmt_tmp == 'i')
+	else if (**fmt == 'd' || **fmt == 'i')
 	 	str = d_to_string(ap);
-	else if (*fmt_tmp == 'u')
+	else if (**fmt == 'u')
 	    str = u_to_string(ap);
-	else if (*fmt_tmp == 'x')
+	else if (**fmt == 'x')
 		str = x_to_string(ap, 0);
-	else if (*fmt_tmp == 'X')
+	else if (**fmt == 'X')
 		str = x_to_string(ap, 1);
-    else if (*fmt_tmp == 'p')
+    else if (**fmt == 'p')
         str = p_to_string(ap);
 	else // エラーを返す
 		return (LONG_MAX);
 	str = apply_flag(str, flag);
 	free(flag);
-	*fmt = ++fmt_tmp;
+	(*fmt)++;
 	return (write_str(str, c_null));
 }
 
-size_t	extract_text(const char *fmt, size_t len)
+int	check_len(int n, int write_len)
 {
-    char *str;
-	char *str_tmp;
+	size_t	total_len;
 
-    str = ft_calloc(len+1, sizeof(char));
-	if (!str)
-		return (LONG_MAX);
-	str_tmp = str;
-    while (len--)
-        *str++ = *fmt++;
-	// write(1, "here4\n", 7);
-	return (write_str(str_tmp, 0));
-}
-
-int	check_len(int write_len, size_t total_len)
-{
-	total_len += write_len;
-	if (total_len > INT_MAX)
-		return (1);
-	return (0);
+	total_len = write_len + n;
+	if (n < 0 || total_len > INT_MAX)
+		return (-1);
+	return ((int)total_len);
 }
 
 int	ft_printf(const char *fmt, ...)
 {
 	va_list	ap;
-	char *p;
-	size_t	total_len;
-	int write_len;
+	int	write_len;
+	size_t	len;
 
 	if (fmt == NULL)
 		return (-1);
-	total_len = 0;
+	write_len = 0;
 	va_start(ap, fmt);
 	while (*fmt != '\0')
 	{
-		p = (char *)fmt;
-		while (*p != '%' && *p != '\0')
-		    p++;
-		if (p != fmt)
+		if (*fmt == '%')
 		{
-		    write_len = extract_text(fmt, p-fmt);
-			fmt = p;
+			fmt++;
+			len = parse(&fmt, &ap);
+	    	if (len > INT_MAX)
+				write_len = -1;
+			write_len = check_len(len, write_len);
 		}
-		else if (*p == '%')
-		{
-			++fmt;
-		    write_len = parse(&fmt, &ap);
-			
-		}
-	    if (write_len > INT_MAX || check_len(write_len, total_len))
-			return (-1);
-		total_len += write_len;
+		else
+			write_len = check_len(write(1, fmt++, 1), write_len);
+		if (write_len == -1)
+			break;
 	}
 	va_end(ap);
-	return ((int)total_len);
+	return (write_len);
 }

@@ -7,126 +7,123 @@ pflag	*init_flag()
 	flag = ft_calloc(1, sizeof(pflag));
 	if (!flag)
 		return (NULL);
-	flag->is_alignleft = false;
-	flag->is_padding = false;
-	flag->is_precision = false;
-	flag->is_specifier = false;
-	flag->is_alignspace = false;
-	flag->is_assign = false;
+	flag->fl_type = FLAG_NONE;
 	flag->convert = NULL;
 	flag->field_width = 0;
 	flag->precision = 0;
 	return (flag);
 }
 
-int	check_priority(pflag *flag, const char *fmt)
+// int	check_priority(pflag *flag, const char *fmt)
+// {
+// 	// 元々の方が優先度高い -> 0
+// 	// 共存できる -> 1
+// 	// 新しい方が優先度高い -> 1
+// 	if ((flag->fl_type == FLAG_MINUS) && *fmt == '0')
+// 		return (0);
+// 	else if ((flag->fl_type == FLAG_PLUS) && *fmt == ' ')
+// 		return (0);
+// 	// else if (flag->is_precision && (*fmt == '0' || *fmt == '-'))
+// 	// 	return (0);
+// 		// return (0);
+// 	return (1);
+// }
+
+// void	change_flag_status(pflag *flag, const char *fmt)
+// {
+// 	// 古いフラグを消す
+// 	if ((flag->fl_type == FLAG_ZERO) && *fmt == '-')
+// 		flag->fl_type = FLAG_NONE;
+// 	// else if (flag->is_precision && *fmt == '-')
+// 	// 	flag->is_precision = false;
+// }
+
+// size_t	consume_n(const char **fmt)
+// {
+// 	int base;
+// 	size_t n;
+// 	char	*c;
+
+// 	c = (char *)*fmt;
+// 	base = 1;
+// 	n = 0;
+// 	if (*c == '-')
+// 		return (n);
+// 	while (*c != '\0')
+// 	{
+// 		if (ft_isdigit(*c))
+// 		{
+// 			n = (*c - '0') + n * base;
+// 			if (base == 1)
+// 				base *= 10;
+// 		}
+// 		else
+// 			break;
+// 		c++;
+// 	}
+// 	*fmt = --c; // consume flagでfmtを一つ進めるため
+// 	return (n);
+// }
+
+int	flag_priority(pflag *flag, const char **fmt)
 {
-	// 元々の方が優先度高い -> 0
-	// 共存できる -> 1
-	// 新しい方が優先度高い -> 1
-	if (flag->is_alignleft && *fmt == '0')
+	// int	ret;
+	// char	*fmt_tmp;
+
+	// printf("here: %c\n", *fmt_tmp);
+	// ret = check_priority(flag, *fmt);
+	if ((flag->fl_type == FLAG_MINUS) && **fmt == '0')
 		return (0);
-	else if (flag->is_assign && *fmt == ' ')
+	else if ((flag->fl_type == FLAG_PLUS) && **fmt == ' ')
 		return (0);
 	// else if (flag->is_precision && (*fmt == '0' || *fmt == '-'))
 	// 	return (0);
 		// return (0);
 	return (1);
-}
-
-void	change_flag_status(pflag *flag, const char *fmt)
-{
-	// 古いフラグを消す
-	if (flag->is_padding && *fmt == '-')
-		flag->is_padding = false;
-	// else if (flag->is_precision && *fmt == '-')
-	// 	flag->is_precision = false;
-}
-
-size_t	consume_n(char **fmt)
-{
-	int base;
-	size_t n;
-	char	*c;
-
-	c = (char *)*fmt;
-	base = 1;
-	n = 0;
-	if (*c == '-')
-		return (n);
-	while (*c != '\0')
-	{
-		if (ft_isdigit(*c))
-		{
-			n = (*c - '0') + n * base;
-			if (base == 1)
-				base *= 10;
-		}
-		else
-			break;
-		c++;
-	}
-	*fmt = --c; // consume flagでfmtを一つ進めるため
-	return (n);
-}
-
-int	flag_priority(pflag *flag, char **fmt)
-{
-	int	ret;
-	char	*fmt_tmp;
-
-	fmt_tmp = *fmt;
-	// printf("here: %c\n", *fmt_tmp);
-	ret = check_priority(flag, fmt_tmp);
 	// printf("ret: %d\n", ret);
-	if (ret)
-	{
-		change_flag_status(flag, fmt_tmp);
-		return (ret);
-	}
+	// if (ret)
+	// {
+	// 	change_flag_status(flag, *fmt);
+	// 	return (ret);
+	// }
 	// if (flag->is_padding && *fmt_tmp == '-')
 	// 	flag->is_padding = false;
 	// else if (flag->is_alignspace && *fmt_tmp == '+')
 	// 	flag->is_alignspace = false;
 	// else if (flag->is)
 	// change_flag_status(flag, fmt_tmp);
-	fmt_tmp++;
-	consume_n(&fmt_tmp);
-	*fmt = ++fmt_tmp;
+	// (*fmt)++;
+	// consume_n(fmt);
+	// *fmt = ++fmt_tmp;
 	// printf("%c\n", *fmt_tmp);
-	return (ret);
+	// return (ret);
 }
 
-int	flag_consume(char **fmt, pflag *flag)
+void	flag_consume(const char **fmt, pflag *flag)
 {
-	char *fmt_tmp;
-
-	fmt_tmp = *fmt;
-	while (*fmt_tmp != '\0' && ft_strchr("0-#+ ", *fmt_tmp))
+	while (**fmt != '\0' && ft_strchr("0-#+ ", **fmt))
 	{
-		if (flag_priority(flag, &fmt_tmp))
+		if (flag_priority(flag, fmt))
 		{
-			if (*fmt_tmp == '-')
-				flag->is_alignleft = 1;
-			else if (*fmt_tmp == '0')
-				flag->is_padding = 1;
-			else if (*fmt_tmp == ' ')
-				flag->is_alignspace = 1;
-			else if (*fmt_tmp == '.')
-				flag->is_precision = 1;
-			else if (*fmt_tmp == '#')
-				flag->is_specifier = 1;
-			else if (*fmt_tmp == '+')
-				flag->is_specifier = 1;
-			fmt_tmp++;
+			if (**fmt == '-')
+				flag->fl_type = FLAG_MINUS;
+			else if (**fmt == '0')
+				flag->fl_type = FLAG_ZERO;
+			else if (**fmt == ' ')
+				flag->fl_type = FLAG_SPACE;
+			// else if (**fmt == '.')
+			// 	flag->fl_type = FLAG_DOT;
+			else if (**fmt == '#')
+				flag->fl_type = FLAG_SHARP;
+			else if (**fmt == '+')
+				flag->fl_type = FLAG_PLUS;
 		}
+		(*fmt)++;
 	}
-	*fmt = fmt_tmp;
-	return (1);
 }
 
 // void	width_consume(const char **fmt, pflag *flag)
-void	width_consume(char **fmt, pflag *flag, va_list *ap)
+void	width_consume(const char **fmt, pflag *flag, va_list *ap)
 {
 	size_t	width;
 
@@ -137,44 +134,65 @@ void	width_consume(char **fmt, pflag *flag, va_list *ap)
 		{
 
 		}
-		flag->width = width;
+		flag->field_width = width;
 		(*fmt)++;
 	}
-	else if (fmt_isdigit(**fmt))
+	else if (ft_isdigit(**fmt))
 	{
 		// width = ft_atoi(*fmt);
-		flag->width = ft_atoi(*fmt);
-		(*fmt) += number_of_digits(flag->width);
+		flag->field_width = ft_atoi(*fmt);
+		(*fmt) += number_of_digits(flag->field_width);
 	}
 }
 
-void	precision_consume()
+void	precision_consume(const char **fmt, pflag *flag, va_list *ap)
 {
-	return ;
+	size_t	precision;
+
+	if (**fmt == '.')
+	{
+		flag->is_precision = 1;
+		(*fmt)++;
+		// printf("fmt2.5: %s\n", *fmt);
+		if (**fmt == '*')
+		{
+			precision = va_arg(*ap, int);
+			if (precision >= 0)
+				flag->precision = precision;
+			(*fmt)++;
+		}
+		else if (**fmt == '-')
+			return ;
+		else if (ft_isdigit(**fmt))
+		{
+			// printf("hello\n");
+			flag->precision = ft_atoi(*fmt);
+			*fmt += number_of_digits(flag->precision);
+		}
+	}
 }
 
 // void	consume_width()
 
-pflag   *consume(const char **fmt)
+pflag   *consume(const char **fmt, va_list *ap)
 {
-	char	*fmt_tmp;
 	pflag	*flag;
-	int	ret;
 
 	flag = init_flag();
 	if (!flag)
 		return (NULL);
-	fmt_tmp = (char *)*fmt;
 	// printf("%c\n", *fmt_tmp);
 	// printf("%s\n", ft_strchr("cspdiuxX%", 'k'));
-    while (*fmt_tmp != '\0' && ft_strchr("0-#+ ", *fmt_tmp))
+	while (**fmt != '\0' && !ft_strchr("%csdiuxXp", **fmt))
 	{
-		flag_consume(&fmt_tmp, flag);
-		width_consume(&fmt_tmp, flag);
-		precision_consume(&fmt_tmp, flag);
-		// flag = precision_consume();
-		// fmt_tmp++;
+		flag_consume(fmt, flag);
+		// printf("fmt1: %s\n", *fmt);
+		width_consume(fmt, flag, ap);
+		// printf("fmt2: %s\n", *fmt);
+		precision_consume(fmt, flag, ap);
+		// printf("fmt3: %s\n", *fmt);
 	}
-	*fmt = fmt_tmp;
+	// flag = precision_consume();
+	// fmt_tmp++;
 	return (flag);
 }
