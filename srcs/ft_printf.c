@@ -1,53 +1,75 @@
 #include "../includes/ft_printf.h"
 
-size_t	write_str(char *str, int c_null)
-{
-	size_t	len;
+// size_t	write_str(char *str, int c_null)
+// {
+// 	size_t	len;
 
-	if (!str)
-		return (1);
-	len = ft_strlen(str);
-	if (c_null)
-		len = 1;
-	ft_putstr_fd(str, 1);
-	free(str);
+// 	if (!str)
+// 		return (1);
+// 	len = ft_strlen(str);
+// 	if (c_null)
+// 		len = 1;
+// 	ft_putstr_fd(str, 1);
+// 	free(str);
+// 	return (len);
+// }
+
+int	write_fmt(const char **fmt, pflag *flag, va_list *ap)
+{
+	int	len;
+
+	if (**fmt == 'c')
+		len = write_c(fmt, flag, ap);
+	else if (**fmt == '%')
+		len = write_c(fmt, flag, ap);
+	else if (**fmt == 's')
+		len = write_s(flag, ap);
+	else if (**fmt == 'd' || **fmt == 'i' || **fmt == 'u')
+	 	len = write_diu(fmt, flag, ap);
+	else if (**fmt == 'x' || **fmt == 'X')
+		len = write_xX(fmt, flag, ap);
+	else if (**fmt == 'p')
+		len = write_p(flag, ap);
+	else
+		len = -1;
 	return (len);
 }
 
-size_t	parse(const char **fmt, va_list *ap)
+int	parse(const char **fmt, va_list *ap)
 {
 	pflag	*flag;
-	char	*str;
-	int		c_null;
+	// char	*str;
+	// int		c_null;
+	int	write_len;
 
-	c_null = 0;
+	// c_null = 0;
     flag = consume(fmt, ap);
-	// printf("fmt: %s\n", *fmt);
-	// flag = flag_priority(flag);
 	if (!flag)
-		return (LONG_MAX);
-	if (**fmt == 'c')
-		str = c_to_string(va_arg(*ap, int), &c_null);
-	else if (**fmt == '%')
-		str = c_to_string('%', &c_null);
-	else if (**fmt == 's')
-		str = s_to_string(ap);
-	else if (**fmt == 'd' || **fmt == 'i')
-	 	str = d_to_string(ap);
-	else if (**fmt == 'u')
-	    str = u_to_string(ap);
-	else if (**fmt == 'x')
-		str = x_to_string(ap, 0);
-	else if (**fmt == 'X')
-		str = x_to_string(ap, 1);
-    else if (**fmt == 'p')
-        str = p_to_string(ap);
-	else // エラーを返す
-		return (LONG_MAX);
-	str = apply_flag(str, flag);
-	free(flag);
+		return (-1);
+	// if (**fmt == 'c')
+	// 	str = c_to_string(unsigned char)(va_arg(*ap, int), &c_null);
+	// else if (**fmt == '%')
+	// 	str = c_to_string('%', &c_null);
+	// else if (**fmt == 's')
+	// 	str = s_to_string(ap);
+	// else if (**fmt == 'd' || **fmt == 'i')
+	//  	str = d_to_string(ap);
+	// else if (**fmt == 'u')
+	//     str = u_to_string(ap);
+	// else if (**fmt == 'x')
+	// 	str = x_to_string(ap, 0);
+	// else if (**fmt == 'X')
+	// 	str = x_to_string(ap, 1);
+    // else if (**fmt == 'p')
+    //     str = p_to_string(ap);
+	write_len = write_fmt(fmt, flag, ap);
+	// エラーを返す
+	// len = write_fmt(str, flag, fmt);
+	// str = apply_flag(str, flag);
 	(*fmt)++;
-	return (write_str(str, c_null));
+	free(flag);
+	// return (write_str(str, c_null));
+	return (write_len);
 }
 
 int	check_len(int n, int write_len)

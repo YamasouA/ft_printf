@@ -65,4 +65,10 @@ char *x_to_string(va_list *ap, int type);
 // contents *new_contents(const char *fmt, va_list ap, char *text);
 // pflag *flag_consume(const char *fmt);
 // void free_list(contents *cont);
+
+int	write_c(const char **fmt, pflag *flag, va_list *ap);
+size_t	write_s(pflag *flag, va_list *ap);
+int	write_diu(const char **fmt, pflag *flag, va_list *ap);
+int	write_xX(const char **fmt, pflag *flag, va_list *ap);
+int	write_p(pflag *flag, va_list *ap);
 #endif

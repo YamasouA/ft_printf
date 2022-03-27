@@ -567,4 +567,11 @@ int main()
     printf("%d\n", i);
     printf("%d\n", j);
     printf("\n");
+
+    i = printf("%5c\n", 'a');
+    j = ft_printf("%5c\n", 'a');
+    printf("%d\n", i);
+    printf("%d\n", j);
+    printf("\n");
+
 }
