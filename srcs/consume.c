@@ -14,89 +14,14 @@ pflag	*init_flag()
 	return (flag);
 }
 
-// int	check_priority(pflag *flag, const char *fmt)
-// {
-// 	// 元々の方が優先度高い -> 0
-// 	// 共存できる -> 1
-// 	// 新しい方が優先度高い -> 1
-// 	if ((flag->fl_type == FLAG_MINUS) && *fmt == '0')
-// 		return (0);
-// 	else if ((flag->fl_type == FLAG_PLUS) && *fmt == ' ')
-// 		return (0);
-// 	// else if (flag->is_precision && (*fmt == '0' || *fmt == '-'))
-// 	// 	return (0);
-// 		// return (0);
-// 	return (1);
-// }
-
-// void	change_flag_status(pflag *flag, const char *fmt)
-// {
-// 	// 古いフラグを消す
-// 	if ((flag->fl_type == FLAG_ZERO) && *fmt == '-')
-// 		flag->fl_type = FLAG_NONE;
-// 	// else if (flag->is_precision && *fmt == '-')
-// 	// 	flag->is_precision = false;
-// }
-
-// size_t	consume_n(const char **fmt)
-// {
-// 	int base;
-// 	size_t n;
-// 	char	*c;
-
-// 	c = (char *)*fmt;
-// 	base = 1;
-// 	n = 0;
-// 	if (*c == '-')
-// 		return (n);
-// 	while (*c != '\0')
-// 	{
-// 		if (ft_isdigit(*c))
-// 		{
-// 			n = (*c - '0') + n * base;
-// 			if (base == 1)
-// 				base *= 10;
-// 		}
-// 		else
-// 			break;
-// 		c++;
-// 	}
-// 	*fmt = --c; // consume flagでfmtを一つ進めるため
-// 	return (n);
-// }
 
 int	flag_priority(pflag *flag, const char **fmt)
 {
-	// int	ret;
-	// char	*fmt_tmp;
-
-	// printf("here: %c\n", *fmt_tmp);
-	// ret = check_priority(flag, *fmt);
 	if ((flag->fl_type == FLAG_MINUS) && **fmt == '0')
 		return (0);
 	else if ((flag->fl_type == FLAG_PLUS) && **fmt == ' ')
 		return (0);
-	// else if (flag->is_precision && (*fmt == '0' || *fmt == '-'))
-	// 	return (0);
-		// return (0);
 	return (1);
-	// printf("ret: %d\n", ret);
-	// if (ret)
-	// {
-	// 	change_flag_status(flag, *fmt);
-	// 	return (ret);
-	// }
-	// if (flag->is_padding && *fmt_tmp == '-')
-	// 	flag->is_padding = false;
-	// else if (flag->is_alignspace && *fmt_tmp == '+')
-	// 	flag->is_alignspace = false;
-	// else if (flag->is)
-	// change_flag_status(flag, fmt_tmp);
-	// (*fmt)++;
-	// consume_n(fmt);
-	// *fmt = ++fmt_tmp;
-	// printf("%c\n", *fmt_tmp);
-	// return (ret);
 }
 
 void	flag_consume(const char **fmt, pflag *flag)
@@ -167,7 +92,7 @@ void	precision_consume(const char **fmt, pflag *flag, va_list *ap)
 		{
 			// printf("hello\n");
 			flag->precision = ft_atoi(*fmt);
-			*fmt += number_of_digits(flag->precision);
+			(*fmt) += number_of_digits(flag->precision);
 		}
 	}
 }

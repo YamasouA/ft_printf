@@ -31,6 +31,11 @@ typedef struct {
     size_t precision;
 } pflag;
 
+typedef struct {
+    int size_width;
+    int size_pre;
+} size_width;
+
 // typedef struct contents contents;
 // struct contents{
 //     size_t len;
@@ -71,4 +76,5 @@ size_t	write_s(pflag *flag, va_list *ap);
 int	write_diu(const char **fmt, pflag *flag, va_list *ap);
 int	write_xX(const char **fmt, pflag *flag, va_list *ap);
 int	write_p(pflag *flag, va_list *ap);
+int	write_flag_c(char c, int width);
 #endif

@@ -541,8 +541,20 @@ int main()
     printf("%d\n", j);
     printf("\n");
 
-    i = printf("%10.5s\n", "abcde");
+    i = printf("%10.10s\n", "abcde");
     j = ft_printf("%10.5s\n", "abcde");
+    printf("%d\n", i);
+    printf("%d\n", j);
+    printf("\n");
+
+    i = printf("%010.30dend\n", INT_MAX);
+    j = ft_printf("%010.30dend\n", INT_MAX);
+    printf("%d\n", i);
+    printf("%d\n", j);
+    printf("\n");
+
+    i = printf("%010.30pend\n", INT_MAX);
+    j = ft_printf("%010.30pend\n", INT_MAX);
     printf("%d\n", i);
     printf("%d\n", j);
     printf("\n");
