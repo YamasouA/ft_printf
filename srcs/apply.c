@@ -15,14 +15,14 @@ int	write_flag_c(char c, int width)
 	return (cnt);
 }
 
-static int	write_flag_head(pflag *flag, size_t	width_len)
+static int	write_flag_head(pflag *flag, int width_len)
 {
 	int	write_len;
 
 	write_len = 0;
 	if (width_len < 0)
 		return (0);
-	if (flag->field_width == FLAG_SPACE || flag->fl_type == FLAG_NONE)
+	if (flag->fl_type == FLAG_SPACE || flag->fl_type == FLAG_NONE)
 		write_len += write_flag_c(' ', width_len);
 	if (flag->fl_type == FLAG_ZERO)
 		write_len += write_flag_c('0', width_len);

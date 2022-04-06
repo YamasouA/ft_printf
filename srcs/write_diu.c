@@ -11,7 +11,7 @@ static int	write_flag_head(pflag *flag, size_t	str_len, int n,char *str)
     if (flag->precision > str_len)
         total_str = flag->precision;
     width_len = flag->field_width - total_str - n;
-	if (flag->field_width == FLAG_SPACE || flag->fl_type == FLAG_NONE)
+	if (flag->fl_type == FLAG_SPACE || flag->fl_type == FLAG_NONE)
 		write_len += write_flag_c(' ', width_len);
 	if (flag->fl_type == FLAG_ZERO)
 		write_len += write_flag_c('0', width_len);
@@ -52,11 +52,9 @@ int	write_diu(const char **fmt, pflag *flag, va_list *ap)
 	is_sign = (*str == '-');
 	str_len = ft_strlen(str) - is_sign;
 	write_len += write_flag_head(flag, str_len, is_sign, str);
-	// if (*str == '-')
-	// 	str++;
-	if (!(!ft_strncmp(str, "0", str_len) && !flag->precision))
+	if (!(!ft_strncmp(str, "0", str_len) && flag->precision == 0 && flag->is_precision))
 		write_len += write(1, str + is_sign, str_len);
-	write_len += write_flag_tail(flag, str_len, 0);
+	write_len += write_flag_tail(flag, str_len, is_sign);
 	free(str);
 	return (write_len);
 }
@@ -71,7 +69,7 @@ int	write_xX(const char **fmt, pflag *flag, va_list *ap)
 	str = x_to_string(ap, **fmt == 'x' ? 0 : 1);
 	str_len = ft_strlen(str);
 	write_len += write_flag_head(flag, str_len, 0, str);
-	if (!(!ft_strncmp(str, "0", str_len) && !flag->precision))
+	if (!(!ft_strncmp(str, "0", str_len) && flag->precision == 0 && flag->is_precision))
 		write_len += write(1, str, str_len);
 	write_len += write_flag_tail(flag, str_len, 0);
 	free(str);
@@ -89,7 +87,7 @@ int	write_p(pflag *flag, va_list *ap)
 	str_len = ft_strlen(str) - 2;
     write_len += write_flag_head(flag, str_len, 2, str);
 	str += 2;
-	if (!(!ft_strncmp(str, "0", str_len) && !flag->precision))
+	if (!(!ft_strncmp(str, "0", str_len) && flag->precision == 0 && flag->is_precision))
 		write_len += write(1, str, str_len);
 	write_len += write_flag_tail(flag, str_len, 2);
 	free(str - 2);
