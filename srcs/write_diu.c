@@ -13,9 +13,9 @@ static int	write_flag_head(pflag *flag, size_t	str_len, int n,char *str)
     width_len = flag->field_width - total_str - n;
 	if (flag->fl_type == FLAG_SPACE || flag->fl_type == FLAG_NONE)
 		write_len += write_flag_c(' ', width_len);
+    write_len += write(1, str, n);
 	if (flag->fl_type == FLAG_ZERO)
 		write_len += write_flag_c('0', width_len);
-    write_len += write(1, str, n);
     if (total_str > str_len)
         write_len += write_flag_c('0', total_str - str_len);
 	return (write_len);
