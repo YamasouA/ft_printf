@@ -36,8 +36,6 @@ void	flag_consume(const char **fmt, pflag *flag)
 				flag->fl_type = FLAG_ZERO;
 			else if (**fmt == ' ')
 				flag->fl_type = FLAG_SPACE;
-			// else if (**fmt == '.')
-			// 	flag->fl_type = FLAG_DOT;
 			else if (**fmt == '#')
 				flag->fl_type = FLAG_SHARP;
 			else if (**fmt == '+')
@@ -47,7 +45,6 @@ void	flag_consume(const char **fmt, pflag *flag)
 	}
 }
 
-// void	width_consume(const char **fmt, pflag *flag)
 void	width_consume(const char **fmt, pflag *flag, va_list *ap)
 {
 	size_t	width;
@@ -64,7 +61,6 @@ void	width_consume(const char **fmt, pflag *flag, va_list *ap)
 	}
 	else if (ft_isdigit(**fmt))
 	{
-		// width = ft_atoi(*fmt);
 		flag->field_width = ft_atoi(*fmt);
 		(*fmt) += number_of_digits(flag->field_width);
 	}
@@ -78,7 +74,6 @@ void	precision_consume(const char **fmt, pflag *flag, va_list *ap)
 	{
 		flag->is_precision = 1;
 		(*fmt)++;
-		// printf("fmt2.5: %s\n", *fmt);
 		if (**fmt == '*')
 		{
 			precision = va_arg(*ap, int);
@@ -90,14 +85,11 @@ void	precision_consume(const char **fmt, pflag *flag, va_list *ap)
 			return ;
 		else if (ft_isdigit(**fmt))
 		{
-			// printf("hello\n");
 			flag->precision = ft_atoi(*fmt);
 			(*fmt) += number_of_digits(flag->precision);
 		}
 	}
 }
-
-// void	consume_width()
 
 pflag   *consume(const char **fmt, va_list *ap)
 {
@@ -106,18 +98,11 @@ pflag   *consume(const char **fmt, va_list *ap)
 	flag = init_flag();
 	if (!flag)
 		return (NULL);
-	// printf("%c\n", *fmt_tmp);
-	// printf("%s\n", ft_strchr("cspdiuxX%", 'k'));
 	while (**fmt != '\0' && !ft_strchr("%csdiuxXp", **fmt))
 	{
 		flag_consume(fmt, flag);
-		// printf("fmt1: %s\n", *fmt);
 		width_consume(fmt, flag, ap);
-		// printf("fmt2: %s\n", *fmt);
 		precision_consume(fmt, flag, ap);
-		// printf("fmt3: %s\n", *fmt);
 	}
-	// flag = precision_consume();
-	// fmt_tmp++;
 	return (flag);
 }

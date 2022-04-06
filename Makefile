@@ -6,8 +6,8 @@ SRCS_DIR = srcs/
 SRCS_FILES = ft_printf.c\
 		udsp_to_string.c\
 		consume.c\
-		apply.c\
 		utils.c\
+		write_cs.c\
 		write_diu.c\
 
 SRCS := $(addprefix $(SRCS_DIR), $(SRCS_FILES))
