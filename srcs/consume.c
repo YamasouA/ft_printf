@@ -8,7 +8,7 @@ pflag	*init_flag()
 	if (!flag)
 		return (NULL);
 	flag->fl_type = FLAG_NONE;
-	flag->convert = NULL;
+	flag->c = '\0';
 	flag->field_width = 0;
 	flag->precision = 0;
 	return (flag);

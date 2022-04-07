@@ -20,7 +20,7 @@ typedef enum {
 typedef struct {
     fl  fl_type;
     bool is_precision;
-    char *convert;
+    char c;
     size_t field_width;
     size_t precision;
 } pflag;
@@ -28,10 +28,8 @@ typedef struct {
 int number_of_digits(int n);
 int ft_printf(const char *fmt, ...);
 pflag	*consume(const char **fmt, va_list *ap);
-char    *c_to_string(char c, int *c_null);
 char *u_to_string(va_list *ap);
 char *d_to_string(va_list *ap);
-char *s_to_string(va_list *ap);
 char *p_to_string(va_list *ap);
 char *x_to_string(va_list *ap, int type);
 int	write_c(const char **fmt, pflag *flag, va_list *ap);

@@ -1,4 +1,4 @@
-# ft_printf
+# printf_copy
 
 ## 現在
 - printfの再実装

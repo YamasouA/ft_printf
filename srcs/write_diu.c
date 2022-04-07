@@ -11,8 +11,12 @@ static int	write_flag_head(pflag *flag, size_t	str_len, int n,char *str)
     if (flag->precision > str_len)
         total_str = flag->precision;
     width_len = flag->field_width - total_str - n;
-	if (flag->fl_type == FLAG_SPACE || flag->fl_type == FLAG_NONE)
+	if (flag->fl_type == FLAG_PLUS && n == 0 && flag->c == 'd')
+		width_len--;
+	if (flag->fl_type == FLAG_SPACE || flag->fl_type == FLAG_NONE || flag->fl_type == FLAG_PLUS)
 		write_len += write_flag_c(' ', width_len);
+	if (flag->fl_type == FLAG_PLUS && n == 0 && flag->c == 'd')
+		write_len += write(1, "+", 1);
     write_len += write(1, str, n);
 	if (flag->fl_type == FLAG_ZERO)
 		write_len += write_flag_c('0', width_len);
@@ -48,7 +52,10 @@ int	write_diu(const char **fmt, pflag *flag, va_list *ap)
 	if (**fmt == 'u')
 		str = u_to_string(ap);
 	else
+	{
 		str = d_to_string(ap);
+		flag->c = 'd';
+	}
 	is_sign = (*str == '-');
 	str_len = ft_strlen(str) - is_sign;
 	write_len += write_flag_head(flag, str_len, is_sign, str);

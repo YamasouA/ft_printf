@@ -1,18 +1,5 @@
 #include "../includes/ft_printf.h"
 
-char    *c_to_string(char c, int *c_null)
-{
-    char *s;
-
-    s = (char *)ft_calloc(2, sizeof(char));
-    if (!s)
-        return (NULL);
-    s[0] = c;
-    if (c == 0)
-        *c_null = 1;
-    return (s);
-}
-
 char *u_to_string(va_list *ap)
 {
     unsigned int    n;
@@ -27,16 +14,6 @@ char *d_to_string(va_list *ap)
     
     n = va_arg(*ap, int);
     return (ft_itoa(n));
-}
-
-char *s_to_string(va_list *ap)
-{
-    char *s;
-
-    s = va_arg(*ap, char *);
-    if (!s)
-        s = "(null)";
-    return (ft_strdup(s));
 }
 
 char *p_to_string(va_list *ap)

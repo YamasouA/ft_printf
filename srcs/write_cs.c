@@ -22,7 +22,7 @@ static int	write_flag_head(pflag *flag, int width_len)
 	write_len = 0;
 	if (width_len < 0)
 		return (0);
-	if (flag->fl_type == FLAG_SPACE || flag->fl_type == FLAG_NONE)
+	if (flag->fl_type == FLAG_SPACE || flag->fl_type == FLAG_NONE || flag->fl_type == FLAG_PLUS)
 		write_len += write_flag_c(' ', width_len);
 	if (flag->fl_type == FLAG_ZERO)
 		write_len += write_flag_c('0', width_len);

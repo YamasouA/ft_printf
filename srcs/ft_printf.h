@@ -13,7 +13,7 @@ typedef struct {
     bool is_specifier;
     bool is_alignspace;
     bool is_assign;
-    char *convert;
+    char c;
     size_t field_width;
     size_t precision;
 } pflag;
