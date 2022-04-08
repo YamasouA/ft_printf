@@ -1,15 +1,25 @@
 #include <stdio.h>
+#include <string.h>
 #include <limits.h>
 #include "./includes/ft_printf.h"
+
+void check(int i, int j)
+{
+    if (i != j)
+    {
+        printf("printf: %d\n", i);
+        printf("ft_printf: %d\n", j);
+        printf("error!!\n");
+        exit(0);
+    }
+}
 
 void d_check(int d)
 {
     int i, j;
     i = printf("%d\n", d);
     j = ft_printf("%d\n", d);
-    printf("printf: %d\n", i);
-    printf("ft_printf: %d\n", j);
-    printf("\n");
+    check(i, j);
 }
 
 void i_check(int d)
@@ -17,9 +27,7 @@ void i_check(int d)
     int i, j;
     i = printf("%i\n", d);
     j = ft_printf("%i\n", d);
-    printf("printf: %d\n", i);
-    printf("ft_printf: %d\n", j);
-    printf("\n");
+    check(i, j);
 }
 
 void c_check(char c)
@@ -27,9 +35,7 @@ void c_check(char c)
     int i, j;
     i = printf("%c\n", c);
     j = ft_printf("%c\n", c);
-    printf("printf: %d\n", i);
-    printf("ft_printf: %d\n", j);
-    printf("\n");
+    check(i, j);
 }
 
 void s_check(char *s)
@@ -37,9 +43,7 @@ void s_check(char *s)
     int i, j;
     i = printf("%s\n", s);
     j = ft_printf("%s\n", s);
-    printf("printf: %d\n", i);
-    printf("ft_printf: %d\n", j);
-    printf("\n");
+    check(i, j);
 }
 
 void u_check(unsigned int u)
@@ -47,9 +51,7 @@ void u_check(unsigned int u)
     int i, j;
     i = printf("%u\n", u);
     j = ft_printf("%u\n", u);
-    printf("printf: %d\n", i);
-    printf("ft_printf: %d\n", j);
-    printf("\n");
+    check(i, j);
 }
 
 void p_check(long long p)
@@ -57,9 +59,7 @@ void p_check(long long p)
     int i, j;
     i = printf("%p\n", p);
     j = ft_printf("%p\n", p);
-    printf("printf: %d\n", i);
-    printf("ft_printf: %d\n", j);
-    printf("\n");
+    check(i, j);
 }
 
 void x_check(long long x)
@@ -67,9 +67,7 @@ void x_check(long long x)
     int i, j;
     i = printf("%x\n", x);
     j = ft_printf("%x\n", x);
-    printf("printf: %d\n", i);
-    printf("ft_printf: %d\n", j);
-    printf("\n");
+    check(i, j);
 }
 
 void X_check(long long x)
@@ -77,12 +75,8 @@ void X_check(long long x)
     int i, j;
     i = printf("%X\n", x);
     j = ft_printf("%X\n", x);
-    printf("printf: %d\n", i);
-    printf("ft_printf: %d\n", j);
-    printf("\n");
+    check(i, j);
 }
-
-
 
 int main()
 {
@@ -99,14 +93,10 @@ int main()
     printf("=============== text only =============\n");
     int k = printf("Hello World !!\n");
     int l = ft_printf("Hello World !!\n");
-    printf("%d\n", k);
-    printf("%d\n", l);
-    printf("\n");
+    check(k, l);
     k = printf("\tabcd\n");
     l = ft_printf("\tabcd\n");
-    printf("%d\n", k);
-    printf("%d\n", l);
-    printf("\n");
+    check(k, l);
 
     printf("=============== %%d ===============\n");
     // printf("printf:INT_MIN\t-> %d\n", INT_MIN);
@@ -335,255 +325,42 @@ int main()
     printf("%d\n", j);
     printf("\n");
 
+    
+
 
     printf("=============== flag case ===============\n");
     printf("=== 0 flag ===\n");
-    i = printf("%010d\n", 1234);
-    j = ft_printf("%010d\n", 1234);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
+    i = printf("%0d\n", INT_MIN);
+    j = ft_printf("%0d\n", INT_MIN);
 
-    i = printf("%010d %03d\n", -1234, -1234);
-    j = ft_printf("%010d %03d\n", -1234, -1234);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
+    i = printf("%0d\n", INT_MIN);
+    j = ft_printf("%0d\n", INT_MIN);
 
-    i = printf("%010d %020d %020d %020d\n", -1234, INT_MIN, INT_MAX, 0);
-    j = ft_printf("%010d %020d %020d %020d\n", -1234, INT_MIN, INT_MAX, 0);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
+    i = printf("%0d\n", INT_MIN);
+    j = ft_printf("%0d\n", INT_MIN);
 
-    i = printf("%010d\n", INT_MIN);
-    j = ft_printf("%010d\n", INT_MIN);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
+    i = printf("%0d\n", INT_MIN);
+    j = ft_printf("%0d\n", INT_MIN);
 
-    i = printf("%010d\n", INT_MAX);
-    j = ft_printf("%010d\n", INT_MAX);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%010s\n", "abcd");
-    j = ft_printf("%010s\n", "abcd");
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%010c\n", 'a');
-    j = ft_printf("%010c\n", 'a');
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%010p\n", INT_MAX);
-    j = ft_printf("%010p\n", INT_MAX);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
+    i = printf("%0d\n", INT_MIN);
+    j = ft_printf("%0d\n", INT_MIN);
 
 
-    printf("=== - flag ===\n");
-    i = printf("%-10dend\n", 1234);
-    j = ft_printf("%-10dend\n", 1234);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
+    printf("=============== large str ===============\n");
+    long long lll = 1LL * INT_MAX + 1LL;
+    char *s = (char *)malloc(lll * sizeof(char));
+    memset(s, 'a', lll-1);
+    long ll;
+    long ll2;
+    // ll = printf("%s\n", s);
+    // ll2 = ft_printf("%s\n", s);
+    // printf("i: %ld\n", ll);
+    // printf("j: %ld\n", ll2);
 
-    i = printf("%-10dend\n", -1234);
-    j = ft_printf("%-10dend\n", -1234);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%-10send\n", "abcd");
-    j = ft_printf("%-10send\n", "abcd");
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%-10cend\n", 'z');
-    j = ft_printf("%-10cend\n", 'z');
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%-10pend\n", INT_MAX);
-    j = ft_printf("%-10pend\n", INT_MAX);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%-10xend\n", INT_MIN);
-    j = ft_printf("%-10xend\n", INT_MIN);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%-1xend\n", INT_MIN);
-    j = ft_printf("%-1xend\n", INT_MIN);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%-10%end\n");
-    j = ft_printf("%-10%end\n");
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%-10d%-5send\n", 1234, "abcd");
-    j = ft_printf("%-10d%-5send\n", 1234, "abcd");
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%-10x%-2cend\n", INT_MIN, 'a');
-    j = ft_printf("%-10x%-2cend\n", INT_MIN, 'a');
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    printf("=== . flag ===\n");
-    i = printf("%.10d\n", 1234);
-    j = ft_printf("%.10d\n", 1234);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%.10d\n", -1234);
-    j = ft_printf("%.10d\n", -1234);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%.10d\n", INT_MIN);
-    j = ft_printf("%.10d\n", INT_MIN);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%.10d\n", INT_MAX);
-    j = ft_printf("%.10d\n", INT_MAX);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%.10d%.30d\n", INT_MAX, INT_MIN);
-    j = ft_printf("%.10d%.30d\n", INT_MAX, INT_MIN);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    printf("=== multiple flag ===\n");
-    i = printf("%.10d%030d%-10d\n", INT_MAX, INT_MIN, 0);
-    j = ft_printf("%.10d%030d%-10d\n", INT_MAX, INT_MIN, 0);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%-30.10dend\n", INT_MIN);
-    j = ft_printf("%-30.10dend\n", INT_MIN);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%-30.10dend\n", INT_MIN);
-    j = ft_printf("%-30.10dend\n", INT_MIN);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%-.0dend\n", INT_MIN);
-    j = ft_printf("%-.0dend\n", INT_MIN);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%.0-10dend\n", INT_MIN);
-    j = ft_printf("%.0-10dend\n", INT_MIN);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    printf("==aa==\n");
-    i = printf("%010.30dend\n", INT_MAX);
-    j = ft_printf("%010.30dend\n", INT_MAX);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%012-30dend\n", INT_MIN);
-    j = ft_printf("%012-30dend\n", INT_MIN);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%-120.30dend\n", INT_MIN);
-    j = ft_printf("%-120.30dend\n", INT_MIN);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%-120-30dend\n", INT_MIN);
-    j = ft_printf("%-120-30dend\n", INT_MIN);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%-120-30dend %010-8dend\n", INT_MIN, INT_MAX);
-    j = ft_printf("%-120-30dend %010-8dend\n", INT_MIN, INT_MAX);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%10.10s\n", "abcde");
-    j = ft_printf("%10.5s\n", "abcde");
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%010.30dend\n", INT_MAX);
-    j = ft_printf("%010.30dend\n", INT_MAX);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%010.30pend\n", INT_MAX);
-    j = ft_printf("%010.30pend\n", INT_MAX);
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    // printf("=============== clash case  ===============\n");
-    // char *s = (char *)ft_calloc(INT_MAX, sizeof(char));
-    // for (int i = 0; i < INT_MAX; i++)
-    //     s[i] = "A";
-    // i = printf("%s\n", s);
-    // // j = ft_printf("%s\n", s);
-    // // printf("%d\n", i);
-    // // printf("%d\n", j);
-    // printf("\n");
-
-    // i = printf("%\n", 1234);
-    // j = ft_printf("%\n", 1234);
-    // printf("%d\n", i);
-    // printf("%d\n", j);
-    printf("================ check ==============\n");
-    i = printf("%.1s\n", "");
-    j = ft_printf("%.1s\n", "");
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
-    i = printf("%5c\n", 'a');
-    j = ft_printf("%5c\n", 'a');
-    printf("%d\n", i);
-    printf("%d\n", j);
-    printf("\n");
-
+    long long size = 1LL * INT_MAX + 10LL;
+	char *str = (char *)malloc(size * sizeof(char));
+	memset(str, '_', size - 1LL);
+	str[size - 1LL] = '\0';
+	// printf("%d\n", printf("ab\n%s", str));
+	printf("%d\n", ft_printf("ab\n%s", str));
 }

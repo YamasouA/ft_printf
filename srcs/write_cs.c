@@ -75,6 +75,7 @@ size_t	write_s(pflag *flag, va_list *ap)
 		width_len = flag->field_width - str_len;
 	write_len += write_flag_head(flag, width_len);
 	write_len += write(1, str, str_len);
+	printf("::here:: %d\n", write_len);
 	write_len += write_flag_tail(flag, width_len);
 	return (write_len);
 }
