@@ -47,15 +47,16 @@ void	flag_consume(const char **fmt, pflag *flag)
 
 void	width_consume(const char **fmt, pflag *flag, va_list *ap)
 {
-	size_t	width;
+	int width;
 
 	if (**fmt == '*')
 	{
 		width = va_arg(*ap, int);
 		if (width < 0)
-		{
-
-		}
+                {
+                    flag->fl_type = FLAG_MINUS;
+		    width *= -1;
+                }
 		flag->field_width = width;
 		(*fmt)++;
 	}
