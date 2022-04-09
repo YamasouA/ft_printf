@@ -166,8 +166,8 @@ int main()
     X_check(NULL);
     p_check(NULL);
 
-    x = printf("[%c %c %c]\n", '0', 0, '1');
-    y = ft_printf("[%c %c %c]\n", '0', 0, '1');
+    int x = printf("[%c %c %c]\n", '0', 0, '1');
+    int y = ft_printf("[%c %c %c]\n", '0', 0, '1');
     check(x, y);
 
     printf("\n=============== multiple format ===============\n");
@@ -197,6 +197,26 @@ int main()
     j = ft_printf("[%0-10d]\n", INT_MIN);
     check(i, j);
 
+    i = printf("[%0s]\n", "abcd");
+    j = ft_printf("[%0s]\n", "abcd");
+    check(i, j);
+
+    i = printf("[%010s]\n", "abcd");
+    j = ft_printf("[%010s]\n", "abcd");
+    check(i, j);
+
+    i = printf("[%010p]\n", INT_MAX);
+    j = ft_printf("[%010p]\n", INT_MAX);
+    check(i, j);
+
+    i = printf("[%010p]\n", INT_MIN);
+    j = ft_printf("[%010p]\n", INT_MIN);
+    check(i, j);
+    
+    i = printf("[%020p]\n", INT_MIN);
+    j = ft_printf("[%020p]\n", INT_MIN);
+    check(i, j);
+
     printf("\n=== . flag ===\n");
     i = printf("[%.d]\n", INT_MIN);
     j = ft_printf("[%.d]\n", INT_MIN);
@@ -210,12 +230,28 @@ int main()
     j = ft_printf("[%.20d]\n", INT_MIN);
     check(i, j);
 
-    i = printf("[%.-10d]\n", INT_MIN);
-    j = ft_printf("[%.-10d]\n", INT_MIN);
-    check(i, j);
-
     i = printf("[%.10d]\n", INT_MIN);
     j = ft_printf("[%.10d]\n", INT_MIN);
+    check(i, j);
+
+    i = printf("[%.s]\n", "abcd");
+    j = ft_printf("[%.s]\n", "abcd");
+    check(i, j);
+
+    i = printf("[%.10s]\n", "abcd");
+    j = ft_printf("[%.10s]\n", "abcd");
+    check(i, j);
+
+    i = printf("[%.1s]\n", "abcd");
+    j = ft_printf("[%.1s]\n", "abcd");
+    check(i, j);
+
+    i = printf("[%.1p]\n", INT_MAX);
+    j = ft_printf("[%.1p]\n", INT_MAX);
+    check(i, j);
+
+    i = printf("[%.15p]\n", INT_MAX);
+    j = ft_printf("[%.15p]\n", INT_MAX);
     check(i, j);
 
     printf("\n=== - flag ===\n");
@@ -229,6 +265,18 @@ int main()
 
     i = printf("[%-20d]\n", INT_MIN);
     j = ft_printf("[%-20d]\n", INT_MIN);
+    check(i, j);
+
+    i = printf("[%-s]\n", "abcd");
+    j = ft_printf("[%-s]\n", "abcd");
+    check(i, j);
+
+    i = printf("[%-20s]\n", "abcd");
+    j = ft_printf("[%-20s]\n", "abcd");
+    check(i, j);
+
+    i = printf("[%-1s]\n", "abcd");
+    j = ft_printf("[%-1s]\n", "abcd");
     check(i, j);
 
     printf("=============== \*, m$ ===============\n");
@@ -268,4 +316,18 @@ int main()
 //	str[size - 1LL] = '\0';
 //	// printf("%d\n", printf("ab\n%s", str));
 //	printf("%d\n", ft_printf("ab\n%s", str));
+
+    printf("=============== error case ===============\n");
+    i = printf("%d\n", "abcd");
+    j = ft_printf("%d\n", "abcd");
+    check(i, j);
+
+    i = printf("%\n");
+    printf("i: %d\n", i);
+    //j = ft_printf("%\n");
+    //check(i, j);
+
+    i = printf("%d%s%d\n", 1234, "abcd");
+    j = ft_printf("%d%s%d\n", 1234, "abcd");
+    check(i, j);
 }
