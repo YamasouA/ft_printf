@@ -58,6 +58,8 @@ int	write_diu(const char **fmt, pflag *flag, va_list *ap)
 	}
 	is_sign = (*str == '-');
 	str_len = ft_strlen(str) - is_sign;
+	if (flag->field_width > INT_MAX)
+		return (-1);
 	write_len += write_flag_head(flag, str_len, is_sign, str);
 	if (!(!ft_strncmp(str, "0", str_len) && flag->precision == 0 && flag->is_precision))
 		write_len += write(1, str + is_sign, str_len);
@@ -75,6 +77,8 @@ int	write_xX(const char **fmt, pflag *flag, va_list *ap)
 	write_len = 0;
 	str = x_to_string(ap, **fmt == 'x' ? 0 : 1);
 	str_len = ft_strlen(str);
+	if (flag->field_width > INT_MAX)
+		return (-1);
 	write_len += write_flag_head(flag, str_len, 0, str);
 	if (!(!ft_strncmp(str, "0", str_len) && flag->precision == 0 && flag->is_precision))
 		write_len += write(1, str, str_len);
@@ -92,6 +96,8 @@ int	write_p(pflag *flag, va_list *ap)
 	write_len = 0;
 	str = p_to_string(ap);
 	str_len = ft_strlen(str) - 2;
+	if (flag->field_width > INT_MAX)
+		return (-1);
     write_len += write_flag_head(flag, str_len, 2, str);
 	str += 2;
 	if (!(!ft_strncmp(str, "0", str_len) && flag->precision == 0 && flag->is_precision))

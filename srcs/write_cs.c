@@ -48,6 +48,8 @@ int	write_c(const char **fmt, pflag *flag, va_list *ap)
 	if (**fmt != '%')
 		c = (unsigned char)va_arg(*ap, int);
 	write_len = 0;
+	if (flag->field_width > INT_MAX)
+		return (-1);
 	if (flag->field_width > 0)
 		write_len += write_flag_head(flag, flag->field_width - 1);
 	write_len += write(1, &c, 1);
@@ -56,7 +58,7 @@ int	write_c(const char **fmt, pflag *flag, va_list *ap)
 	return (write_len);
 }
 
-size_t	write_s(pflag *flag, va_list *ap)
+int	write_s(pflag *flag, va_list *ap)
 {
 	size_t	str_len;
 	size_t	width_len;
@@ -73,6 +75,8 @@ size_t	write_s(pflag *flag, va_list *ap)
 		str_len = flag->precision;
 	if (flag->field_width > str_len)
 		width_len = flag->field_width - str_len;
+	if (str_len > INT_MAX || flag->field_width > INT_MAX)
+		return (-1);
 	write_len += write_flag_head(flag, width_len);
 	write_len += write(1, str, str_len);
 	write_len += write_flag_tail(flag, width_len);

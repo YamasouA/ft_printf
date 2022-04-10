@@ -26,7 +26,7 @@ int	flag_priority(pflag *flag, const char **fmt)
 
 void	flag_consume(const char **fmt, pflag *flag)
 {
-	while (**fmt != '\0' && ft_strchr("0-#+ ", **fmt))
+    while (**fmt != '\0' && ft_strchr("0-#+ ", **fmt))
 	{
 		if (flag_priority(flag, fmt))
 		{
@@ -47,29 +47,30 @@ void	flag_consume(const char **fmt, pflag *flag)
 
 void	width_consume(const char **fmt, pflag *flag, va_list *ap)
 {
-	int width;
+	long long width;
 
 	if (**fmt == '*')
 	{
 		width = va_arg(*ap, int);
 		if (width < 0)
-                {
-                    flag->fl_type = FLAG_MINUS;
+        {
+            flag->fl_type = FLAG_MINUS;
 		    width *= -1;
-                }
+        }
 		flag->field_width = width;
 		(*fmt)++;
 	}
 	else if (ft_isdigit(**fmt))
 	{
-		flag->field_width = ft_atoi(*fmt);
-		(*fmt) += number_of_digits(flag->field_width);
+        width = ft_atol(*fmt);
+        (*fmt) += number_of_digits(width);
+        flag->field_width = width;
 	}
 }
 
 void	precision_consume(const char **fmt, pflag *flag, va_list *ap)
 {
-	size_t	precision;
+	int	precision;
 
 	if (**fmt == '.')
 	{
@@ -86,7 +87,7 @@ void	precision_consume(const char **fmt, pflag *flag, va_list *ap)
 			return ;
 		else if (ft_isdigit(**fmt))
 		{
-			flag->precision = ft_atoi(*fmt);
+			flag->precision = ft_atol(*fmt);
 			(*fmt) += number_of_digits(flag->precision);
 		}
 	}
@@ -99,11 +100,8 @@ pflag   *consume(const char **fmt, va_list *ap)
 	flag = init_flag();
 	if (!flag)
 		return (NULL);
-	while (**fmt != '\0' && !ft_strchr("%csdiuxXp", **fmt))
-	{
-		flag_consume(fmt, flag);
-		width_consume(fmt, flag, ap);
-		precision_consume(fmt, flag, ap);
-	}
+	flag_consume(fmt, flag);
+	width_consume(fmt, flag, ap);
+	precision_consume(fmt, flag, ap);
 	return (flag);
 }

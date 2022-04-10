@@ -16,8 +16,10 @@ int	write_fmt(const char **fmt, pflag *flag, va_list *ap)
 		len = write_xX(fmt, flag, ap);
 	else if (**fmt == 'p')
 		len = write_p(flag, ap);
+	if (ft_strchr("%csdiuxXp", **fmt))
+		(*fmt)++;
 	else
-		len = -1;
+		len = 0;
 	return (len);
 }
 
@@ -30,7 +32,8 @@ int	parse(const char **fmt, va_list *ap)
 	if (!flag)
 		return (-1);
 	write_len = write_fmt(fmt, flag, ap);
-	(*fmt)++;
+    // if (write_len != -100)
+	    // (*fmt)++;
 	free(flag);
 	return (write_len);
 }
@@ -39,8 +42,10 @@ int	check_len(int n, int write_len)
 {
 	size_t	total_len;
 
+	if (n < 0)
+		return (-1);
 	total_len = write_len + n;
-	if (n < 0 || total_len > INT_MAX)
+	if (total_len > INT_MAX)
 		return (-1);
 	return ((int)total_len);
 }
@@ -49,7 +54,7 @@ int	ft_printf(const char *fmt, ...)
 {
 	va_list	ap;
 	int	write_len;
-	size_t	len;
+	int	len;
 
 	if (fmt == NULL)
 		return (-1);

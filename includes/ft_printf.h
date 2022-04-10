@@ -25,7 +25,7 @@ typedef struct {
     size_t precision;
 } pflag;
 
-int number_of_digits(int n);
+int number_of_digits(long long n);
 int ft_printf(const char *fmt, ...);
 pflag	*consume(const char **fmt, va_list *ap);
 char *u_to_string(va_list *ap);
@@ -33,7 +33,7 @@ char *d_to_string(va_list *ap);
 char *p_to_string(va_list *ap);
 char *x_to_string(va_list *ap, int type);
 int	write_c(const char **fmt, pflag *flag, va_list *ap);
-size_t	write_s(pflag *flag, va_list *ap);
+int	write_s(pflag *flag, va_list *ap);
 int	write_diu(const char **fmt, pflag *flag, va_list *ap);
 int	write_xX(const char **fmt, pflag *flag, va_list *ap);
 int	write_p(pflag *flag, va_list *ap);

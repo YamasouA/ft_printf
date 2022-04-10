@@ -279,6 +279,47 @@ int main()
     j = ft_printf("[%-1s]\n", "abcd");
     check(i, j);
 
+    printf("\n=== multi flag ===\n");
+    i = printf("[%-01s]\n", "abcd");
+    j = ft_printf("[%-01s]\n", "abcd");
+    check(i, j);
+
+    i = printf("[%-010s]\n", "abcd");
+    j = ft_printf("[%-010s]\n", "abcd");
+    check(i, j);
+
+    i = printf("[%0-1s]\n", "abcd");
+    j = ft_printf("[%0-1s]\n", "abcd");
+    check(i, j);
+
+    i = printf("[%0-10s]\n", "abcd");
+    j = ft_printf("[%0-10s]\n", "abcd");
+    check(i, j);
+    
+    i = printf("[%-1.1s]\n", "abcd");
+    j = ft_printf("[%-1.1s]\n", "abcd");
+    check(i, j);
+
+    i = printf("[%-10.1s]\n", "abcd");
+    j = ft_printf("[%-10.1s]\n", "abcd");
+    check(i, j);
+
+    i = printf("[%-10.10s]\n", "abcd");
+    j = ft_printf("[%-10.10s]\n", "abcd");
+    check(i, j);
+
+    i = printf("[%01.1s]\n", "abcd");
+    j = ft_printf("[%01.1s]\n", "abcd");
+    check(i, j);
+
+    i = printf("[%010.1s]\n", "abcd");
+    j = ft_printf("[%010.1s]\n", "abcd");
+    check(i, j);
+    
+    i = printf("[%010.1s]\n", "abcd");
+    j = ft_printf("[%010.1s]\n", "abcd");
+    check(i, j);
+
     printf("=============== \*, m$ ===============\n");
     i = printf("[%0*d]\n", 10, 100);
     j = ft_printf("[%0*d]\n", 10, 100);
@@ -299,35 +340,51 @@ int main()
     //j = ft_printf("[%03$d]\n", -100, 100, 10);
     //check(i, j);
 
-//    printf("=============== large str ===============\n");
-//    long long lll = 1LL * INT_MAX + 1LL;
-//    char *s = (char *)malloc(lll * sizeof(char));
+   printf("=============== large str ===============\n");
+//    long long lll = 1LL * INT_MAX + 10LL;
+//    char *s = (char *)calloc(lll, sizeof(char));
 //    memset(s, 'a', lll-1);
 //    long ll;
 //    long ll2;
-//    // ll = printf("%s\n", s);
-//    // ll2 = ft_printf("%s\n", s);
-//    // printf("i: %ld\n", ll);
-//    // printf("j: %ld\n", ll2);
-//
-//    long long size = 1LL * INT_MAX + 10LL;
-//	char *str = (char *)malloc(size * sizeof(char));
-//	memset(str, '_', size - 1LL);
-//	str[size - 1LL] = '\0';
-//	// printf("%d\n", printf("ab\n%s", str));
-//	printf("%d\n", ft_printf("ab\n%s", str));
+//    ll = printf("%s\n", s);
+//    ll2 = ft_printf("%s\n", s);
+
+//     printf("large number width\n");
+//     long long ll3 = printf("%02147483648d\n", 0);
+//     long long ll4 = ft_printf("%02147483648d\n", 0);
+//     check(ll3, ll4);
+
+//     ll = printf("%-2147483648d\n", 0);
+//     ll2 = ft_printf("%-2147483648d\n", 0);
+//     check(ll, ll2);
+
+    // printf("large number precision\n");
+    // ll = printf("%.2147483648d\n", 0);
+    // ll2 = ft_printf("%.2147483648d\n", 0);
+    // check(ll, ll2);
 
     printf("=============== error case ===============\n");
-    i = printf("%d\n", "abcd");
-    j = ft_printf("%d\n", "abcd");
+    i = printf("[%d]\n", "abcd");
+    j = ft_printf("[%d]\n", "abcd");
     check(i, j);
 
-    i = printf("%\n");
-    printf("i: %d\n", i);
-    //j = ft_printf("%\n");
-    //check(i, j);
+    int ii = printf("[%]\n");
+    int jj = ft_printf("[%]\n");
+    check(ii, jj);
 
-    i = printf("%d%s%d\n", 1234, "abcd");
-    j = ft_printf("%d%s%d\n", 1234, "abcd");
-    check(i, j);
+    ii = printf("[%d%s%d]\n", 1234, "abcd");
+    jj = ft_printf("[%d%s%d]\n", 1234, "abcd");
+    check(ii, jj);
+
+    ii = printf("[%d]\n");
+    jj = ft_printf("[%d]\n");
+    check(ii, jj);
+
+    // ii = printf("[%s]\n");
+    // jj = ft_printf("[%s]\n");
+    // check(ii, jj);
+
+    // ii = printf("[%p]\n");
+    // jj = ft_printf("[%p]\n");
+    // check(ii, jj);
 }
