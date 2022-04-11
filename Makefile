@@ -15,17 +15,15 @@ OBJS := $(SRCS:%.c=%.o)
 
 all: $(NAME)
 
-$(NAME) : $(OBJS) $(LIBFT)
-	cp $(LIBFT) $(NAME)
+bonus: ${NAME}
+
+$(NAME) : $(OBJS)
+	make -C libft
+	cp ${LIBFT} $(NAME)
 	ar rc $(NAME) $(OBJS)
 
 %.o:%.c
 	$(CC) $(CFLAGS) -o $@ -c $< 
-
-$(LIBFT): empty
-	make -C libft
-
-empty:
 
 clean:
 	rm -f $(OBJS)

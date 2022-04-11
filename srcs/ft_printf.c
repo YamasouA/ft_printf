@@ -32,8 +32,6 @@ int	parse(const char **fmt, va_list *ap)
 	if (!flag)
 		return (-1);
 	write_len = write_fmt(fmt, flag, ap);
-    // if (write_len != -100)
-	    // (*fmt)++;
 	free(flag);
 	return (write_len);
 }
