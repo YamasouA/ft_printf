@@ -18,11 +18,12 @@ char *d_to_string(va_list *ap)
 
 char *p_to_string(va_list *ap)
 {
-    unsigned long ul;
+    unsigned long long	ul;
+	//void	*ul;
     char    *str;
     char    *ret;
 
-    ul = (unsigned long)va_arg(*ap, void *);
+    ul = (unsigned long long)va_arg(*ap, void *);
     str = ft_ultoxtoa(ul, "0123456789abcdef");
     ret = ft_strjoin("0x", str);
     free(str);

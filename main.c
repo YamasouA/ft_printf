@@ -341,18 +341,19 @@ int main()
     //check(i, j);
 
    printf("=============== large str ===============\n");
-//    long long lll = 1LL * INT_MAX + 10LL;
-//    char *s = (char *)calloc(lll, sizeof(char));
-//    memset(s, 'a', lll-1);
-//    long ll;
-//    long ll2;
-//    ll = printf("%s\n", s);
-//    ll2 = ft_printf("%s\n", s);
+   long long lll = 1LL * INT_MAX + 10LL;
+   char *s = (char *)calloc(lll, sizeof(char));
+   memset(s, 'a', lll-1);
+   long ll;
+   long ll2;
+   ll = printf("%s\n", s);
+   ll2 = ft_printf("%s\n", s);
+   check(ll, ll2);
 
-//     printf("large number width\n");
-//     long long ll3 = printf("%02147483648d\n", 0);
-//     long long ll4 = ft_printf("%02147483648d\n", 0);
-//     check(ll3, ll4);
+    printf("large number width\n");
+    long long ll3 = printf("%02147483648d\n", 0);
+    long long ll4 = ft_printf("%02147483648d\n", 0);
+    check(ll3, ll4);
 
 //     ll = printf("%-2147483648d\n", 0);
 //     ll2 = ft_printf("%-2147483648d\n", 0);
@@ -360,8 +361,15 @@ int main()
 
     // printf("large number precision\n");
     // ll = printf("%.2147483648d\n", 0);
+    // printf("%ld\n", ll);
     // ll2 = ft_printf("%.2147483648d\n", 0);
     // check(ll, ll2);
+
+    i = printf("%p %p\n", LONG_MIN, LONG_MAX);
+    j = ft_printf("%p %p\n", LONG_MIN, LONG_MAX);
+
+    i = printf("%p %p\n", ULONG_MAX, -ULONG_MAX);
+    j = ft_printf("%p %p\n", ULONG_MAX, -ULONG_MAX);
 
     printf("=============== error case ===============\n");
     i = printf("[%d]\n", "abcd");
@@ -379,12 +387,4 @@ int main()
     ii = printf("[%d]\n");
     jj = ft_printf("[%d]\n");
     check(ii, jj);
-
-    // ii = printf("[%s]\n");
-    // jj = ft_printf("[%s]\n");
-    // check(ii, jj);
-
-    // ii = printf("[%p]\n");
-    // jj = ft_printf("[%p]\n");
-    // check(ii, jj);
 }

@@ -1,6 +1,6 @@
 #include "libft.h"
 
-size_t  count_n(unsigned long u, size_t base_n)
+size_t  count_n(unsigned long long u, size_t base_n)
 {
     size_t cnt;
 
@@ -15,7 +15,7 @@ size_t  count_n(unsigned long u, size_t base_n)
     return (cnt);
 }
 
-char    *ft_ultoxtoa(unsigned long u, char *base)
+char    *ft_ultoxtoa(unsigned long long u, char *base)
 {
     char    *str;
     size_t  base_n;
