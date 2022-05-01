@@ -30,12 +30,17 @@ char *p_to_string(va_list *ap)
     return (ret);
 }
 
-char *x_to_string(va_list *ap, int type)
+char *x_to_string(va_list *ap, char c)
 {
     char base[2][17] = {"0123456789abcdef", "0123456789ABCDEF"};
     char *b;
     unsigned int u;
+    int type;
 
+    if (c == 'x')
+        type = 0;
+    else
+        type = 1;
     b = base[type];
     u = va_arg(*ap, unsigned int);
 

@@ -7,7 +7,7 @@ pflag	*init_flag()
 	flag = ft_calloc(1, sizeof(pflag));
 	if (!flag)
 		return (NULL);
-	flag->fl_type = FLAG_NONE;
+	flag->flag = 0;
 	flag->c = '\0';
 	flag->field_width = 0;
 	flag->precision = 0;
@@ -15,34 +15,31 @@ pflag	*init_flag()
 }
 
 
-int	flag_priority(pflag *flag, const char **fmt)
+void	flag_priority(pflag *flag)
 {
-	if ((flag->fl_type == FLAG_MINUS) && **fmt == '0')
-		return (0);
-	else if ((flag->fl_type == FLAG_PLUS) && **fmt == ' ')
-		return (0);
-	return (1);
+	if ((flag->flag & FLAG_MINUS) && (flag->flag & FLAG_ZERO))
+		flag->flag &= ~FLAG_ZERO;
+	if ((flag->flag & FLAG_PLUS) && (flag->flag & FLAG_SPACE))
+		flag->flag &= ~FLAG_SPACE;
 }
 
 void	flag_consume(const char **fmt, pflag *flag)
 {
     while (**fmt != '\0' && ft_strchr("0-#+ ", **fmt))
 	{
-		if (flag_priority(flag, fmt))
-		{
-			if (**fmt == '-')
-				flag->fl_type = FLAG_MINUS;
-			else if (**fmt == '0')
-				flag->fl_type = FLAG_ZERO;
-			else if (**fmt == ' ')
-				flag->fl_type = FLAG_SPACE;
-			else if (**fmt == '#')
-				flag->fl_type = FLAG_SHARP;
-			else if (**fmt == '+')
-				flag->fl_type = FLAG_PLUS;
-		}
+		if (**fmt == '-')
+			flag->flag |= FLAG_MINUS;
+		else if (**fmt == '0')
+			flag->flag |= FLAG_ZERO;
+		else if (**fmt == ' ')
+			flag->flag |= FLAG_SPACE;
+		else if (**fmt == '#')
+			flag->flag |= FLAG_SHARP;
+		else if (**fmt == '+')
+			flag->flag |= FLAG_PLUS;
 		(*fmt)++;
 	}
+	flag_priority(flag);
 }
 
 void	width_consume(const char **fmt, pflag *flag, va_list *ap)
@@ -54,7 +51,7 @@ void	width_consume(const char **fmt, pflag *flag, va_list *ap)
 		width = va_arg(*ap, int);
 		if (width < 0)
         {
-            flag->fl_type = FLAG_MINUS;
+            flag->flag |= FLAG_MINUS;
 		    width *= -1;
         }
 		flag->field_width = width;

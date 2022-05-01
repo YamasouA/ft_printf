@@ -8,17 +8,17 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-typedef enum {
-    FLAG_NONE,
-    FLAG_ZERO,
-    FLAG_DOT,
-    FLAG_MINUS,
-    FLAG_SHARP,
-    FLAG_SPACE,
-    FLAG_PLUS,
-} fl;
+enum {
+    // FLAG_NONE,
+    FLAG_ZERO = 1,
+    FLAG_DOT = 2,
+    FLAG_MINUS = 4,
+    FLAG_SHARP = 8,
+    FLAG_SPACE = 16,
+    FLAG_PLUS = 32,
+};
 typedef struct {
-    fl  fl_type;
+    int  flag;
     bool is_precision;
     char c;
     size_t field_width;
@@ -31,7 +31,7 @@ pflag	*consume(const char **fmt, va_list *ap);
 char *u_to_string(va_list *ap);
 char *d_to_string(va_list *ap);
 char *p_to_string(va_list *ap);
-char *x_to_string(va_list *ap, int type);
+char *x_to_string(va_list *ap, char c);
 int	write_c(const char **fmt, pflag *flag, va_list *ap);
 int	write_s(pflag *flag, va_list *ap);
 int	write_diu(const char **fmt, pflag *flag, va_list *ap);

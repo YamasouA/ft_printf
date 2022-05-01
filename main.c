@@ -170,6 +170,10 @@ int main()
     int y = ft_printf("[%c %c %c]\n", '0', 0, '1');
     check(x, y);
 
+    x = printf("[%]\n");
+    y = ft_printf("[%]\n");
+    check(x, y);
+
     printf("\n=============== multiple format ===============\n");
     int i = printf("[format %c %s %% %d %i %u %x %X %p]\n", 'a', "HELLO", INT_MIN, INT_MAX, UINT_MAX, UINT_MAX, INT_MIN, ULONG_MAX);
     int j = ft_printf("[format %c %s %% %d %i %u %x %X %p]\n", 'a', "HELLO", INT_MIN, INT_MAX, UINT_MAX, UINT_MAX, INT_MIN, ULONG_MAX);
@@ -279,7 +283,7 @@ int main()
     j = ft_printf("[%-1s]\n", "abcd");
     check(i, j);
 
-    printf("\n=== multi flag ===\n");
+    printf("\n=== multi flag(0, -, .) ===\n");
     i = printf("[%-01s]\n", "abcd");
     j = ft_printf("[%-01s]\n", "abcd");
     check(i, j);
@@ -320,6 +324,56 @@ int main()
     j = ft_printf("[%010.1s]\n", "abcd");
     check(i, j);
 
+    printf("\n=== ' ' flag ===\n");
+    i = printf("[% 1s]\n", "abcd");
+    j = ft_printf("[% 1s]\n", "abcd");
+    check(i, j);
+
+    i = printf("[% 10d]\n", INT_MAX);
+    j = ft_printf("[% 10d]\n", INT_MAX);
+    check(i, j);
+
+    i = printf("[% 1d]\n", -42);
+    j = ft_printf("[% 1d]\n", -42);
+    check(i, j);
+
+    i = printf("[% 10d]\n", -42);
+    j = ft_printf("[% 10d]\n", -42);
+    check(i, j);
+
+    i = printf("[% 12d]\n", INT_MAX);
+    j = ft_printf("[% 12d]\n", INT_MAX);
+
+    i = printf("[% 20d]\n", INT_MAX);
+    j = ft_printf("[% 20d]\n", INT_MAX);
+
+    i = printf("[% 1d]\n", INT_MAX);
+    j = ft_printf("[% 1d]\n", INT_MAX);
+
+    i = printf("[% 10d]\n", 0);
+    j = ft_printf("[% 10d]\n", 0);
+
+    i = printf("[% 10d]\n", INT_MIN);
+    j = ft_printf("[% 10d]\n", INT_MIN);
+
+    i = printf("[% 1d]\n", INT_MIN);
+    j = ft_printf("[% 1d]\n", INT_MIN);
+
+    printf("\n=== + flag ===\n");
+    i = printf("[%+1s]\n", "abcd");
+    j = ft_printf("[%+1s]\n", "abcd");
+    check(i, j);
+
+    printf("\n=== # flag ===\n");
+    i = printf("[%#x]\n", 10);
+    j = ft_printf("[%#x]\n", 10);
+    check(i, j);
+
+    i = printf("[%#X]\n", 10);
+    j = ft_printf("[%#X]\n", 10);
+    check(i, j);
+
+/*
     printf("=============== \*, m$ ===============\n");
     i = printf("[%0*d]\n", 10, 100);
     j = ft_printf("[%0*d]\n", 10, 100);
@@ -387,4 +441,5 @@ int main()
     ii = printf("[%d]\n");
     jj = ft_printf("[%d]\n");
     check(ii, jj);
+    */
 }
